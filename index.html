@@ -1,4185 +1,459 @@
 <!DOCTYPE html>
-
 <html lang="id">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>
-    SAVER-KIT | Smart Energy Virtual Simulator &amp; Sensor Kit
-  </title>
-<!-- TAILWIND -->
-<script src="https://cdn.tailwindcss.com"></script>
-<!-- LUCIDE ICON -->
-<script src="https://unpkg.com/lucide@latest"></script>
-<!-- FONT -->
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SMART HOME ENERGY SIMULATOR</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-
-    * {
-
-      font-family:
-        'Nunito',
-        sans-serif;
-
-    }
-
-
-    html {
-
-      scroll-behavior:
-        smooth;
-
-    }
-
-
-    body {
-
-      background:
-
-        radial-gradient(
-          circle at top left,
-          rgba(59,130,246,.18),
-          transparent 30%
-        ),
-
-        radial-gradient(
-          circle at top right,
-          rgba(34,197,94,.14),
-          transparent 30%
-        ),
-
-        linear-gradient(
-          180deg,
-          #020617,
-          #0f172a
-        );
-
-      color:
-        white;
-
-    }
-
-
-    /* =========================
-       GLASS
-    ========================= */
-
-    .glass {
-
-      background:
-        rgba(15,23,42,.78);
-
-      backdrop-filter:
-        blur(16px);
-
-      border:
-
-        1px solid
-        rgba(148,163,184,.14);
-
-      box-shadow:
-
-        0 18px 50px
-        rgba(2,6,23,.35);
-
-    }
-
-
-    /* =========================
-       HERO
-    ========================= */
-
-    .hero-glow {
-
-      background:
-
-        radial-gradient(
-          circle at 20% 20%,
-          rgba(34,197,94,.16),
-          transparent 30%
-        ),
-
-        radial-gradient(
-          circle at 80% 10%,
-          rgba(59,130,246,.16),
-          transparent 30%
-        ),
-
-        linear-gradient(
-          135deg,
-          #0f172a,
-          #1e293b
-        );
-
-    }
-
-
-    /* =========================
-       CARD
-    ========================= */
-
-    .menu-card {
-
-      transition:
-
-        transform .25s ease,
-        border-color .25s ease,
-        box-shadow .25s ease;
-
-    }
-
-
-    .menu-card:hover {
-
-      transform:
-        translateY(-6px);
-
-      border-color:
-        rgba(34,197,94,.4);
-
-      box-shadow:
-
-        0 20px 35px
-        rgba(0,0,0,.25);
-
-    }
-
-
-    /* =========================
-       INPUT
-    ========================= */
-
-    .energy-input {
-
-      width:
-        100%;
-
-      padding:
-        12px 14px;
-
-      border-radius:
-        12px;
-
-      background:
-        rgba(15,23,42,.8);
-
-      border:
-
-        1px solid
-        rgba(148,163,184,.2);
-
-      color:
-        white;
-
-      outline:
-        none;
-
-    }
-
-
-    .energy-input:focus {
-
-      border-color:
-        #22c55e;
-
-      box-shadow:
-
-        0 0 0 3px
-        rgba(34,197,94,.1);
-
-    }
-
-
-    /* =========================
-       RESULT CARD
-    ========================= */
-
-    .result-card {
-
-      background:
-
-        linear-gradient(
-          135deg,
-          rgba(30,41,59,.9),
-          rgba(15,23,42,.9)
-        );
-
-      border:
-
-        1px solid
-        rgba(148,163,184,.15);
-
-      border-radius:
-        20px;
-
-      padding:
-        20px;
-
-    }
-
-
-    /* =========================
-       SIMULATION VISUAL
-    ========================= */
-
-    .scene-mini {
-
-      position:
-        relative;
-
-      overflow:
-        hidden;
-
-      border-radius:
-        18px;
-
-      height:
-        170px;
-
-      background:
-
-        linear-gradient(
-          180deg,
-          #1e293b,
-          #0f172a
-        );
-
-      border:
-
-        1px solid
-        rgba(148,163,184,.12);
-
-    }
-
-
-    .light-dot {
-
-      position:
-        absolute;
-
-      width:
-        14px;
-
-      height:
-        14px;
-
-      border-radius:
-        50%;
-
-      background:
-        #fde047;
-
-      box-shadow:
-
-        0 0 18px
-        rgba(250,204,21,.9);
-
-    }
-
-
-    .sensor-ring {
-
-      position:
-        absolute;
-
-      border-radius:
-        50%;
-
-      border:
-
-        2px dashed
-        rgba(34,197,94,.7);
-
-    }
-
-
-    .mini-person {
-
-      position:
-        absolute;
-
-      width:
-        16px;
-
-      height:
-        16px;
-
-      border-radius:
-        50%;
-
-      background:
-
-        linear-gradient(
-          180deg,
-          #60a5fa,
-          #2563eb
-        );
-
-      animation:
-
-        moveAvatar
-        5s infinite
-        alternate
-        ease-in-out;
-
-    }
-
-
-    @keyframes moveAvatar {
-
-      from {
-
-        transform:
-          translate(0,0);
-
-      }
-
-      to {
-
-        transform:
-          translate(35px,20px);
-
-      }
-
-    }
-
-
-    /* =========================
-       IFRAME
-    ========================= */
-
-    .iframe-shell {
-
-      height:
-        calc(100vh - 180px);
-
-      min-height:
-        650px;
-
-    }
-
-
-    .iframe-shell iframe {
-
-      width:
-        100%;
-
-      height:
-        100%;
-
-      border:
-        none;
-
-      border-radius:
-        22px;
-
-      background:
-        var(--surface-solid);
-
-    }
-
-
-    /* =========================
-       ANIMATION
-    ========================= */
-
-    .fade-in {
-
-      animation:
-        fadeIn .35s ease;
-
-    }
-
-
-    @keyframes fadeIn {
-
-      from {
-
-        opacity:
-          0;
-
-        transform:
-          translateY(10px);
-
-      }
-
-      to {
-
-        opacity:
-          1;
-
-        transform:
-          translateY(0);
-
-      }
-
-    }
-
-
-    /* =========================
-       NAV
-    ========================= */
-
-    .nav-link {
-
-      transition:
-        .2s;
-
-    }
-
-
-    .nav-link:hover {
-
-      color:
-        #86efac;
-
-    }
-
-
-    /* =========================
-       SAVER-KIT THEME SYSTEM
-       LIGHT & DARK MODE
-    ========================= */
-
-    :root {
-      --bg-main: #f4f8f6;
-      --bg-soft: #eef5f1;
-      --surface: rgba(255,255,255,.86);
-      --surface-solid: #ffffff;
-      --surface-muted: #f1f5f3;
-      --text-main: #18312a;
-      --text-soft: #52665f;
-      --border: rgba(22,78,62,.14);
-      --shadow: rgba(15,61,48,.10);
-      --accent: #168a63;
-      --accent-2: #2578c4;
-      --focus: rgba(22,138,99,.18);
-    }
-
-    body {
-      min-height: 100vh;
-      color: var(--text-main);
-      background:
-        radial-gradient(circle at 0% 0%, rgba(74,222,128,.14), transparent 28%),
-        radial-gradient(circle at 100% 0%, rgba(96,165,250,.12), transparent 30%),
-        linear-gradient(180deg, #f8fbfa 0%, #edf4f1 52%, #e7f0ec 100%);
-      transition: background .35s ease, color .35s ease;
-    }
-
-    .glass {
-      background: var(--surface);
-      border-color: var(--border);
-      box-shadow: 0 18px 50px var(--shadow);
-      color: var(--text-main);
-    }
-
-    .hero-glow {
-      background:
-        radial-gradient(circle at 16% 20%, rgba(34,197,94,.16), transparent 30%),
-        radial-gradient(circle at 86% 12%, rgba(59,130,246,.14), transparent 32%),
-        linear-gradient(135deg, rgba(255,255,255,.96), rgba(238,247,242,.94));
-    }
-
-    .energy-input {
-      background: rgba(255,255,255,.92);
-      color: var(--text-main);
-      border-color: rgba(22,78,62,.16);
-    }
-
-    .energy-input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 4px var(--focus);
-    }
-
-    .result-card {
-      background: linear-gradient(135deg, #ffffff, #f0f7f3);
-      border-color: rgba(22,78,62,.12);
-      box-shadow: 0 10px 28px rgba(20,83,66,.07);
-    }
-
-    .scene-mini {
-      background:
-        radial-gradient(circle at 50% 0%, rgba(255,255,255,.10), transparent 30%),
-        linear-gradient(180deg, #334155, #1f2937);
-      border-color: rgba(255,255,255,.10);
-    }
-
-    .nav-link { color: var(--text-soft); }
-    .nav-link:hover { color: var(--accent); }
-
-    /* Light mode readability overrides for existing Tailwind content */
-    [data-theme="light"] .text-white { color: #18312a !important; }
-    [data-theme="light"] .text-slate-300 { color: #486057 !important; }
-    [data-theme="light"] .text-slate-400 { color: #60756c !important; }
-    [data-theme="light"] .text-slate-500 { color: #71827b !important; }
-    [data-theme="light"] .text-slate-900 { color: #ffffff !important; }
-    [data-theme="light"] .bg-slate-900\/70 {
-      background: rgba(241,247,244,.92) !important;
-      border: 1px solid rgba(22,78,62,.10);
-    }
-    [data-theme="light"] .bg-slate-700\/40 { background: rgba(51,65,85,.50) !important; }
-    [data-theme="light"] .bg-slate-700 { background: #e6efeb !important; color: #18312a !important; }
-    [data-theme="light"] .border-slate-700 { border-color: rgba(22,78,62,.14) !important; }
-    [data-theme="light"] .text-emerald-300 { color: #087d57 !important; }
-    [data-theme="light"] .text-yellow-300 { color: #9a6500 !important; }
-    [data-theme="light"] .text-sky-300 { color: #1471b8 !important; }
-    [data-theme="light"] .text-purple-300 { color: #7b4db3 !important; }
-    [data-theme="light"] .text-blue-300 { color: #216bb3 !important; }
-    [data-theme="light"] .text-green-300 { color: #18814e !important; }
-    [data-theme="light"] .text-pink-300 { color: #b44f78 !important; }
-    [data-theme="light"] .text-red-300 { color: #b44b4b !important; }
-
-    /* Dark mode */
-    [data-theme="dark"] {
-      --bg-main: #07131a;
-      --surface: rgba(14,27,36,.84);
-      --surface-solid: #10212b;
-      --surface-muted: #142934;
-      --text-main: #edf7f2;
-      --text-soft: #a9bbb3;
-      --border: rgba(148,201,178,.14);
-      --shadow: rgba(0,0,0,.32);
-      --accent: #4ade80;
-      --accent-2: #60a5fa;
-      --focus: rgba(74,222,128,.14);
-    }
-
-    [data-theme="dark"] body {
-      background:
-        radial-gradient(circle at 0% 0%, rgba(34,197,94,.11), transparent 28%),
-        radial-gradient(circle at 100% 0%, rgba(59,130,246,.12), transparent 30%),
-        linear-gradient(180deg, #07131a 0%, #0b1820 50%, #10232b 100%);
-    }
-
-    [data-theme="dark"] .glass {
-      background: rgba(13,28,37,.84);
-      border-color: rgba(148,201,178,.12);
-      box-shadow: 0 18px 50px rgba(0,0,0,.30);
-    }
-
-    [data-theme="dark"] .hero-glow {
-      background:
-        radial-gradient(circle at 18% 20%, rgba(34,197,94,.12), transparent 30%),
-        radial-gradient(circle at 84% 10%, rgba(59,130,246,.14), transparent 32%),
-        linear-gradient(135deg, #0d2028, #142d35);
-    }
-
-    [data-theme="dark"] .energy-input {
-      background: rgba(8,22,29,.88);
-      color: #edf7f2;
-      border-color: rgba(148,201,178,.18);
-    }
-
-    [data-theme="dark"] .result-card {
-      background: linear-gradient(135deg, #142a32, #0d2028);
-      border-color: rgba(148,201,178,.12);
-    }
-
-    [data-theme="dark"] .text-slate-300 { color: #c5d4ce !important; }
-    [data-theme="dark"] .text-slate-400 { color: #9fb2aa !important; }
-    [data-theme="dark"] .text-slate-500 { color: #7f948b !important; }
-    [data-theme="dark"] .bg-slate-900\/70 { background: rgba(7,20,27,.72) !important; }
-    [data-theme="dark"] .bg-slate-700\/40 { background: rgba(51,65,85,.42) !important; }
-    [data-theme="dark"] .border-slate-700 { border-color: rgba(148,201,178,.12) !important; }
-
-    /* Theme switch */
-    .theme-toggle {
-      display: inline-flex;
-      align-items: center;
-      gap: 9px;
-      padding: 9px 13px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text-main);
-      font-weight: 900;
-      font-size: 12px;
-      cursor: pointer;
-      transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
-      box-shadow: 0 8px 22px var(--shadow);
-    }
-
-    .theme-toggle:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 26px var(--shadow);
-    }
-
-    .theme-toggle .theme-icon {
-      width: 17px;
-      height: 17px;
-    }
-
-    @media (max-width: 640px) {
-      .theme-toggle {
-        width: 100%;
-        justify-content: center;
-      }
-    }
-
-
-    /* =========================
-       SAVER-KIT ADVANCED DASHBOARD
-       Added without replacing existing styles
-    ========================= */
-    .advanced-panel {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      box-shadow: 0 16px 42px var(--shadow);
-    }
-
-    .analytics-card {
-      background: var(--surface-solid);
-      border: 1px solid var(--border);
-      border-radius: 22px;
-      padding: 20px;
-    }
-
-    .bar-chart {
-      height: 260px;
-      display: flex;
-      align-items: end;
-      gap: 10px;
-      padding: 20px 8px 8px;
-      border-bottom: 1px solid var(--border);
-      overflow-x: auto;
-    }
-
-    .bar-group {
-      min-width: 42px;
-      flex: 1;
-      display: flex;
-      align-items: end;
-      justify-content: center;
-      gap: 4px;
-      position: relative;
-      height: 100%;
-    }
-
-    .bar {
-      width: 14px;
-      min-height: 4px;
-      border-radius: 8px 8px 3px 3px;
-      transition: height .45s ease;
-    }
-
-    .bar-analog {
-      background: linear-gradient(180deg, #f59e0b, #ea580c);
-    }
-
-    .bar-smart {
-      background: linear-gradient(180deg, #34d399, #059669);
-    }
-
-    .bar-label {
-      position: absolute;
-      bottom: -28px;
-      font-size: 10px;
-      color: var(--text-soft);
-      font-weight: 800;
-    }
-
-    .chart-legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      margin-top: 38px;
-      font-size: 12px;
-      font-weight: 800;
-      color: var(--text-soft);
-    }
-
-    .legend-dot {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      margin-right: 5px;
-    }
-
-    .legend-analog { background: #f59e0b; }
-    .legend-smart { background: #10b981; }
-
-    .gauge-wrap {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      flex-wrap: wrap;
-    }
-
-    .energy-gauge {
-      width: 130px;
-      height: 130px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      background: conic-gradient(#10b981 0deg 126deg, #eab308 126deg 252deg, #ef4444 252deg 360deg);
-      position: relative;
-      flex: 0 0 auto;
-    }
-
-    .energy-gauge::before {
-      content: "";
-      width: 96px;
-      height: 96px;
-      border-radius: 50%;
-      background: var(--surface-solid);
-      position: absolute;
-    }
-
-    .energy-gauge > div {
-      z-index: 1;
-      text-align: center;
-      font-weight: 900;
-    }
-
-    .status-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 9px 13px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 900;
-    }
-
-    .status-efficient { background: rgba(16,185,129,.16); color: #059669; }
-    .status-enough { background: rgba(234,179,8,.16); color: #a16207; }
-    .status-waste { background: rgba(239,68,68,.16); color: #dc2626; }
-
-    [data-theme="dark"] .status-efficient { color: #6ee7b7; }
-    [data-theme="dark"] .status-enough { color: #fde047; }
-    [data-theme="dark"] .status-waste { color: #fca5a5; }
-
-    .progress-track {
-      height: 14px;
-      border-radius: 999px;
-      background: rgba(100,116,139,.18);
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      height: 100%;
-      width: 0%;
-      border-radius: inherit;
-      background: linear-gradient(90deg, #10b981, #34d399);
-      transition: width .45s ease;
-    }
-
-    .sensor-live {
-      position: relative;
-      overflow: hidden;
-    }
-
-    .sensor-live::after {
-      content: "";
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: #10b981;
-      box-shadow: 0 0 0 0 rgba(16,185,129,.45);
-      animation: sensorPulse 1.7s infinite;
-      display: inline-block;
-      margin-left: 8px;
-    }
-
-    @keyframes sensorPulse {
-      70% { box-shadow: 0 0 0 10px rgba(16,185,129,0); }
-      100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
-    }
-
-    .activity-step {
-      border-left: 4px solid var(--accent);
-      padding: 14px 16px;
-      background: var(--surface-muted);
-      border-radius: 0 14px 14px 0;
-    }
-
-    .action-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 12px 16px;
-      border-radius: 15px;
-      font-weight: 900;
-      cursor: pointer;
-      border: 1px solid var(--border);
-      color: var(--text-main);
-      background: var(--surface-solid);
-      transition: transform .2s ease, box-shadow .2s ease;
-    }
-
-    .action-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 28px var(--shadow);
-    }
-
-    .action-btn.primary {
-      background: linear-gradient(135deg, #059669, #10b981);
-      color: white;
-      border-color: transparent;
-    }
-
-    .realtime-number {
-      font-variant-numeric: tabular-nums;
-    }
-
-    @media print {
-      nav, .no-print, #themeToggle, .theme-toggle, #viewerView {
-        display: none !important;
-      }
-      body {
-        background: white !important;
-        color: #111827 !important;
-      }
-      .glass, .advanced-panel, .analytics-card, .result-card {
-        box-shadow: none !important;
-        background: white !important;
-        color: #111827 !important;
-        border: 1px solid #d1d5db !important;
-      }
-    }
-
-
-  
-    /* =========================================================
-       CANVA-INSPIRED PASTEL THEME
-       Revisi pewarnaan mengikuti referensi gambar:
-       putih bersih + lavender + ungu + biru + cyan pastel
-    ========================================================== */
-    :root {
-      --bg-main: #f7f7fb;
-      --bg-soft: #f1f0f8;
-      --surface: rgba(255,255,255,.86);
-      --surface-solid: #ffffff;
-      --surface-muted: #f5f4fa;
-      --text-main: #202124;
-      --text-soft: #667085;
-      --border: rgba(126,87,194,.18);
-      --shadow: rgba(84,56,132,.10);
-      --accent: #7d4cdb;
-      --accent-2: #4f46d9;
-      --focus: rgba(124,77,219,.15);
-    }
-
-    html[data-theme="light"], html:not([data-theme]) {
-      background: #f7f7fb;
-    }
-
-    body {
-      min-height: 100vh;
-      color: var(--text-main);
-      background:
-        radial-gradient(circle at 8% 2%, rgba(72, 199, 206, .25), transparent 23%),
-        radial-gradient(circle at 95% 2%, rgba(159, 122, 234, .23), transparent 24%),
-        radial-gradient(circle at 52% 34%, rgba(255,255,255,.95), transparent 30%),
-        linear-gradient(180deg, #f4f4f8 0%, #fbfbfd 48%, #f4f3f8 100%);
-    }
-
-    .glass {
-      background: rgba(255,255,255,.82);
-      border: 1px solid rgba(126,87,194,.16);
-      box-shadow: 0 16px 45px rgba(73,54,115,.08);
-      backdrop-filter: blur(18px);
-    }
-
-    .hero-glow {
-      position: relative;
-      overflow: hidden;
-      background:
-        radial-gradient(circle at 4% 0%, rgba(70, 198, 203, .33), transparent 34%),
-        radial-gradient(circle at 98% 0%, rgba(158, 112, 234, .32), transparent 32%),
-        linear-gradient(120deg, rgba(255,255,255,.78), rgba(249,248,255,.92));
-    }
-
-    .hero-glow::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,.22) 48%, transparent 100%);
-    }
-
-    .hero-glow > * { position: relative; z-index: 1; }
-
-    h1 {
-      background: linear-gradient(90deg, #3261a8 0%, #4f46d9 55%, #713bc4 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent !important;
-      letter-spacing: -.035em;
-    }
-
-    h2, h3, h4 { color: #202124; }
-
-    .menu-card {
-      background: rgba(255,255,255,.9);
-      border: 1px solid rgba(126,87,194,.12);
-      box-shadow: 0 12px 30px rgba(69,53,105,.07);
-    }
-
-    .menu-card:hover {
-      transform: translateY(-7px);
-      border-color: rgba(124,77,219,.34);
-      box-shadow: 0 22px 44px rgba(91,62,148,.14);
-    }
-
-    .result-card, .analytics-card, .advanced-panel {
-      background: rgba(255,255,255,.92);
-      border-color: rgba(126,87,194,.13);
-      box-shadow: 0 12px 28px rgba(70,53,105,.07);
-    }
-
-    .energy-input {
-      background: #ffffff;
-      color: #202124;
-      border: 1px solid rgba(126,87,194,.20);
-      box-shadow: 0 4px 12px rgba(77,58,115,.03);
-    }
-
-    .energy-input:focus {
-      border-color: #8b5cf6;
-      box-shadow: 0 0 0 4px rgba(139,92,246,.13);
-    }
-
-    .nav-link { color: #62626f; }
-    .nav-link:hover { color: #7044d7; }
-
-    .theme-toggle {
-      background: rgba(255,255,255,.88);
-      border-color: rgba(126,87,194,.20);
-      color: #34303d;
-      box-shadow: 0 8px 24px rgba(81,58,120,.08);
-    }
-
-    /* Re-map existing green primary controls into reference purple */
-    .bg-emerald-500,
-    .action-btn.primary {
-      background: linear-gradient(135deg, #6f3fd2, #8b5cf6) !important;
-      color: #ffffff !important;
-      border-color: transparent !important;
-    }
-
-    .hover\:bg-emerald-400:hover,
-    .hover\:bg-emerald-500:hover {
-      filter: brightness(1.06);
-    }
-
-    .text-emerald-300,
-    [data-theme="light"] .text-emerald-300 {
-      color: #7545d4 !important;
-    }
-
-    .bg-emerald-500\/10 {
-      background: rgba(124,77,219,.10) !important;
-    }
-
-    .border-emerald-400\/20 {
-      border-color: rgba(124,77,219,.20) !important;
-    }
-
-    .border-emerald-400\/15 {
-      border-color: rgba(124,77,219,.16) !important;
-    }
-
-    .text-white,
-    [data-theme="light"] .text-white { color: #202124 !important; }
-
-    .text-slate-300,
-    [data-theme="light"] .text-slate-300 { color: #59606d !important; }
-
-    .text-slate-400,
-    [data-theme="light"] .text-slate-400 { color: #707684 !important; }
-
-    .text-slate-500,
-    [data-theme="light"] .text-slate-500 { color: #8a8f9a !important; }
-
-    .bg-slate-900\/70,
-    [data-theme="light"] .bg-slate-900\/70 {
-      background: rgba(248,247,252,.92) !important;
-      border: 1px solid rgba(126,87,194,.14) !important;
-    }
-
-    .bg-slate-700,
-    [data-theme="light"] .bg-slate-700 {
-      background: #ebeaf2 !important;
-      color: #202124 !important;
-    }
-
-    .bg-slate-700\/40,
-    [data-theme="light"] .bg-slate-700\/40 {
-      background: rgba(129,119,155,.12) !important;
-    }
-
-    .border-slate-700,
-    [data-theme="light"] .border-slate-700 {
-      border-color: rgba(126,87,194,.14) !important;
-    }
-
-    .scene-mini {
-      background:
-        radial-gradient(circle at 50% 0%, rgba(151,117,250,.17), transparent 35%),
-        linear-gradient(180deg, #403c55, #282636);
-      border-color: rgba(126,87,194,.14);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
-    }
-
-    .sensor-ring { border-color: rgba(181,139,255,.88); }
-    .mini-person {
-      background: linear-gradient(180deg, #a78bfa, #7044d7);
-    }
-
-    .progress-fill {
-      background: linear-gradient(90deg, #7d4cdb, #b276ef);
-    }
-
-    .status-efficient { background: rgba(124,77,219,.11); color: #7044d7; }
-
-    /* Existing colorful buttons remain distinct but softer */
-    .bg-yellow-400 { background: #ffd166 !important; }
-    .bg-sky-500 { background: linear-gradient(135deg, #3182ce, #4f8edb) !important; }
-    .bg-sky-400 { background: #66b6ef !important; }
-    .bg-emerald-400 { background: #b48cff !important; }
-
-    .bg-gradient-to-r.from-emerald-500\/15 {
-      background-image: linear-gradient(90deg, rgba(124,77,219,.12), rgba(255,255,255,.90), rgba(79,70,217,.10)) !important;
-    }
-
-    .light-dot {
-      background: #ffe47a;
-      box-shadow: 0 0 18px rgba(255,207,64,.9);
-    }
-
-    /* Dark mode tetap tersedia tetapi lebih selaras dengan palet ungu */
-    [data-theme="dark"] {
-      --bg-main: #171423;
-      --surface: rgba(32,28,45,.86);
-      --surface-solid: #252033;
-      --surface-muted: #302a40;
-      --text-main: #f7f4ff;
-      --text-soft: #c4bdd2;
-      --border: rgba(194,170,255,.15);
-      --shadow: rgba(0,0,0,.32);
-      --accent: #b58cff;
-      --accent-2: #8c7cff;
-      --focus: rgba(181,140,255,.16);
-    }
-
-    [data-theme="dark"] body {
-      background:
-        radial-gradient(circle at 5% 0%, rgba(69,180,193,.12), transparent 25%),
-        radial-gradient(circle at 95% 0%, rgba(149,96,230,.16), transparent 28%),
-        linear-gradient(180deg, #15121f 0%, #1d1829 55%, #17131f 100%);
-    }
-
-    [data-theme="dark"] .glass,
-    [data-theme="dark"] .menu-card {
-      background: rgba(32,28,45,.86);
-      border-color: rgba(194,170,255,.12);
-    }
-
-    [data-theme="dark"] .hero-glow {
-      background:
-        radial-gradient(circle at 3% 0%, rgba(64,180,188,.13), transparent 34%),
-        radial-gradient(circle at 97% 0%, rgba(143,92,228,.16), transparent 34%),
-        linear-gradient(135deg, #201b2d, #2b233a);
-    }
-
-    [data-theme="dark"] h2,
-    [data-theme="dark"] h3,
-    [data-theme="dark"] h4,
-    [data-theme="dark"] .text-white {
-      color: #f7f4ff !important;
-    }
-
-    [data-theme="dark"] .energy-input {
-      background: #211c2e;
-      color: #f7f4ff;
-      border-color: rgba(194,170,255,.18);
-    }
-
-    @media (max-width: 768px) {
-      h1 { font-size: 2.8rem !important; }
-      .hero-glow { border-radius: 24px !important; }
-    }
-
-  
-
-/* =========================================================
-   SIDEBAR NAVIGATION REVISION
-   Konten asli SAVER-KIT tidak diubah.
-   Hanya ditambahkan tata letak menu kiri dan sistem panel.
-========================================================= */
-.sidebar-app{display:grid;grid-template-columns:280px minmax(0,1fr);gap:24px;align-items:start;margin-bottom:32px}
-.sidebar-menu{position:sticky;top:20px;padding:18px;border-radius:28px;background:rgba(255,255,255,.88);border:1px solid rgba(126,87,194,.16);box-shadow:0 16px 42px rgba(70,53,105,.10);backdrop-filter:blur(18px);max-height:calc(100vh - 40px);overflow-y:auto}
-.sidebar-brand{display:flex;align-items:center;gap:12px;padding:12px 10px 18px;margin-bottom:10px;border-bottom:1px solid rgba(126,87,194,.12)}
-.sidebar-brand-icon{width:44px;height:44px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,#7044d7,#9b6bea);color:#fff;box-shadow:0 10px 20px rgba(112,68,215,.20)}
-.sidebar-brand h3{margin:0;font-size:1rem;font-weight:900;color:#26212f}.sidebar-brand p{margin:2px 0 0;font-size:.72rem;color:#77717f;font-weight:700}
-.sidebar-nav{display:flex;flex-direction:column;gap:7px}
-.sidebar-link{width:100%;display:flex;align-items:center;gap:12px;padding:12px 13px;border-radius:15px;border:1px solid transparent;background:transparent;color:#5f5969;text-align:left;font-weight:800;font-size:.9rem;transition:.2s ease;cursor:pointer}
-.sidebar-link i{width:18px;height:18px;flex:0 0 auto}.sidebar-link:hover{background:rgba(124,77,219,.08);color:#7044d7}.sidebar-link.active{background:linear-gradient(135deg,#7044d7,#8b5cf6);color:#fff;box-shadow:0 10px 22px rgba(112,68,215,.20)}
-.sidebar-content{min-width:0}.app-panel{display:none;animation:panelIn .28s ease}.app-panel.active{display:block}.app-panel>section{margin-bottom:0!important}
-.welcome-panel{display:none}.welcome-panel.active{display:block}.welcome-card{padding:clamp(28px,5vw,60px);border-radius:30px;background:radial-gradient(circle at 0% 0%,rgba(70,198,203,.25),transparent 30%),radial-gradient(circle at 100% 0%,rgba(158,112,234,.22),transparent 32%),rgba(255,255,255,.84);border:1px solid rgba(126,87,194,.16);box-shadow:0 16px 45px rgba(73,54,115,.08);text-align:center}.welcome-icon{width:86px;height:86px;border-radius:28px;margin:0 auto 22px;display:grid;place-items:center;background:linear-gradient(135deg,#7044d7,#9b6bea);color:#fff;box-shadow:0 18px 34px rgba(112,68,215,.22)}.welcome-card h2{font-size:clamp(2rem,4vw,3.3rem);font-weight:900;margin:0;background:linear-gradient(90deg,#3261a8,#4f46d9,#713bc4);-webkit-background-clip:text;background-clip:text;color:transparent}.welcome-card p{max-width:760px;margin:18px auto 0;color:#64606c;line-height:1.8;font-weight:600}.welcome-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:32px}.welcome-grid div{padding:18px;border-radius:18px;background:rgba(124,77,219,.06);border:1px solid rgba(124,77,219,.10);text-align:left}.welcome-grid strong{display:block;color:#7044d7;margin-bottom:5px}.welcome-grid span{font-size:.84rem;color:#706b77;font-weight:600}
-.panel-title-mobile{display:none}
-@keyframes panelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-@media(max-width:1024px){.sidebar-app{grid-template-columns:1fr}.sidebar-menu{position:relative;top:0;max-height:none}.sidebar-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.sidebar-brand{grid-column:1/-1}}
-@media(max-width:640px){.sidebar-app{gap:16px}.sidebar-menu{padding:14px;border-radius:22px}.sidebar-nav{grid-template-columns:1fr}.sidebar-link{padding:11px 12px}.welcome-grid{grid-template-columns:1fr}.welcome-card{border-radius:24px;padding:28px 20px}}
-
-</style>
-
-<style id="learning-submenu-style">
-.learning-menu-group{width:100%;margin:2px 0;}
-.learning-menu-toggle{
-  width:100%;display:flex;align-items:center;gap:12px;padding:12px 13px;
-  border-radius:15px;border:1px solid transparent;background:transparent;
-  color:#5f5969;text-align:left;font-weight:800;font-size:.9rem;
-  transition:.2s ease;cursor:pointer;
+:root{
+  --bg:#07111f;--panel:#101d31;--panel2:#162843;--line:#2c4263;
+  --text:#eef7ff;--muted:#9fb2c9;--accent:#36d1dc;--green:#36d399;
+  --yellow:#facc15;--red:#fb7185;--purple:#8b5cf6;
 }
-.learning-menu-toggle:hover{background:rgba(124,77,219,.08);color:#7044d7;}
-.learning-menu-toggle .submenu-arrow{margin-left:auto;transition:transform .25s ease;}
-.learning-menu-group.open .submenu-arrow{transform:rotate(180deg);}
-.learning-submenu{
-  display:none;width:calc(100% - 16px);margin:4px 0 8px 16px;
-  padding-left:10px;border-left:1px solid rgba(124,77,219,.22);
-}
-.learning-menu-group.open .learning-submenu{display:block;}
-.learning-submenu .sidebar-link{width:100%;font-size:.86rem;}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:radial-gradient(circle at top,#17365b 0,#07111f 45%,#030811 100%);color:var(--text);min-height:100vh}
+nav{position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:14px 5%;background:#07111fee;backdrop-filter:blur(16px);border-bottom:1px solid #ffffff12}
+.brand{font-weight:900;letter-spacing:.8px;color:#fff}.brand span{color:var(--accent)}
+.navlinks{display:flex;gap:16px;flex-wrap:wrap}.navlinks a{color:var(--muted);text-decoration:none;font-size:.9rem}.navlinks a:hover{color:var(--accent)}
+.hero{padding:48px 5% 20px;text-align:center}.hero h1{margin:0;font-size:clamp(2rem,5vw,4.2rem);letter-spacing:-2px}.hero h1 span{color:var(--accent)}.hero p{color:var(--muted);max-width:760px;margin:14px auto;line-height:1.7}
+.live{display:inline-flex;gap:8px;align-items:center;padding:7px 13px;border:1px solid #36d39955;border-radius:99px;background:#36d39912;color:#7fffc8;font-size:.8rem}.dot{width:9px;height:9px;background:var(--green);border-radius:50%;box-shadow:0 0 15px var(--green);animation:pulse 1.2s infinite}
+@keyframes pulse{50%{transform:scale(.55);opacity:.4}}
+.container{width:min(1450px,94%);margin:auto}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:24px 0}
+.card,.panel{background:linear-gradient(145deg,#ffffff0d,#ffffff05);border:1px solid #ffffff16;border-radius:20px;box-shadow:0 15px 40px #0004;backdrop-filter:blur(10px)}
+.card{padding:20px}.label{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px}.value{font-size:1.9rem;font-weight:900;margin-top:8px}.sub{font-size:.78rem;color:var(--muted);margin-top:5px}
+.grid-main{display:grid;grid-template-columns:1.55fr .85fr;gap:20px;margin:20px 0}.panel{padding:20px}.panel h2{font-size:1.05rem;margin:0 0 16px}.section{padding:35px 0}
+.house-wrap{min-height:600px;display:flex;justify-content:center;align-items:center;overflow:auto;padding:35px;background:linear-gradient(135deg,#071321,#0e2138);border-radius:20px;perspective:1100px}
+.house{width:850px;min-width:850px;display:grid;grid-template-columns:1.1fr 1.1fr 1fr;grid-template-rows:250px 250px;gap:12px;transform:rotateX(45deg) rotateZ(-3deg);transform-style:preserve-3d;filter:drop-shadow(0 35px 25px #0008)}
+.room{position:relative;padding:15px;border-radius:9px;background:linear-gradient(135deg,#203b59,#13283e);border:3px solid #42617d;box-shadow:inset 0 0 30px #0007,0 16px 15px #0006;cursor:pointer;transition:.25s;transform:translateZ(15px)}
+.room:hover,.room.active{transform:translateZ(40px) scale(1.015);border-color:var(--accent);box-shadow:0 0 25px #36d1dc55,inset 0 0 30px #0007}.room h3{margin:0;font-size:15px;transform:rotateX(-25deg);color:#dff8ff}
+.room .room-icon{position:absolute;inset:45px 0 0;display:flex;justify-content:center;align-items:center;font-size:68px;opacity:.85}.room .mini{position:absolute;bottom:10px;left:12px;font-size:11px;color:#a9bed0}
+.room[data-room="teras"]{grid-column:3;grid-row:1 / span 2;background:linear-gradient(135deg,#274b39,#173626)}
+.furniture{position:absolute;width:65px;height:35px;border-radius:7px;background:#72513b;box-shadow:0 8px 12px #0008;opacity:.8}.f1{left:22%;top:50%}.f2{right:15%;bottom:20%;width:45px;height:70px}
+.room-status{position:absolute;right:10px;top:10px;padding:4px 7px;background:#0008;border-radius:8px;font-size:10px;color:var(--muted)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px}.btn{border:1px solid #ffffff20;background:#ffffff0d;color:#fff;border-radius:12px;padding:10px 13px;cursor:pointer;font-weight:700}.btn:hover{transform:translateY(-2px);background:#ffffff18}.btn.primary{background:#36d1dc22;border-color:#36d1dc55}.btn.green{background:#36d39920;border-color:#36d39955}.btn.red{background:#fb718520;border-color:#fb718555}
+.settings{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:15px}.field{background:#ffffff08;padding:10px;border-radius:12px;border:1px solid #ffffff10}.field label{display:block;color:var(--muted);font-size:.72rem;margin-bottom:6px}.field input,.field select{width:100%;background:#07111f;color:#fff;border:1px solid var(--line);border-radius:8px;padding:8px}
+.device-list{max-height:560px;overflow:auto;padding-right:4px}.device{background:#ffffff07;border:1px solid #ffffff12;border-radius:14px;padding:12px;margin-bottom:10px}.device-head{display:flex;justify-content:space-between;gap:8px;align-items:center}.device-name{font-weight:800;font-size:.9rem}.badge{font-size:.68rem;padding:5px 8px;border-radius:99px;background:#fb718522;color:#ff9aaa}.badge.on{background:#36d39922;color:#7fffc8}.device-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}.device-grid label{font-size:.68rem;color:var(--muted)}.device-grid input{width:100%;margin-top:4px;background:#07111f;color:#fff;border:1px solid var(--line);border-radius:7px;padding:7px}.toggle{border:0;border-radius:9px;padding:8px 11px;cursor:pointer;background:#ffffff12;color:#fff}.toggle.on{background:#36d399;color:#052319}
+.monitor{display:grid;grid-template-columns:1fr 1fr;gap:10px}.metric{padding:13px;border-radius:14px;background:#ffffff08;border:1px solid #ffffff10}.metric b{display:block;font-size:1.25rem;margin-top:5px}.recommend{margin-top:14px;padding:13px;border-radius:14px;background:#36d1dc10;border:1px solid #36d1dc33;color:#cceff3;line-height:1.5;font-size:.85rem}
+.sensor-panel{margin-top:16px;padding:16px;border-radius:16px;background:linear-gradient(135deg,#facc1510,#36d1dc0c);border:1px solid #facc1540}.sensor-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #ffffff12}.sensor-row:last-child{border-bottom:0}.sensor-info b{display:block}.sensor-info span{font-size:.75rem;color:var(--muted)}.switch{position:relative;width:48px;height:26px;display:inline-block}.switch input{display:none}.slider{position:absolute;inset:0;background:#46576c;border-radius:20px;cursor:pointer;transition:.3s}.slider:before{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.3s}.switch input:checked+.slider{background:#36d399}.switch input:checked+.slider:before{transform:translateX(22px)}.sensor-controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.sensor-status{font-size:.72rem;padding:5px 8px;border-radius:99px;background:#ffffff10;color:#c7d5e5}.smart-device{outline:2px solid #facc1570;box-shadow:0 0 18px #facc1520}
+.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;font-size:.82rem}.table th,.table td{padding:10px;border-bottom:1px solid #ffffff12;text-align:left}.table th{color:var(--muted);font-weight:600}.ontext{color:#62e8b3}.offtext{color:#ff8b9a}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}.chartbox{height:280px;padding:16px!important}.chartbox canvas{max-height:220px!important;width:100%!important}.ai-analysis{margin-top:18px;padding:18px;border-radius:18px;background:linear-gradient(135deg,#8b5cf618,#36d1dc10);border:1px solid #8b5cf655}.ai-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.ai-tag{font-size:.72rem;padding:6px 10px;border-radius:99px;background:#8b5cf622;color:#c4b5fd}.ai-content{color:#d9e6f3;line-height:1.7;font-size:.9rem}.ai-content strong{color:#fff}.ai-list{margin:10px 0 0;padding-left:18px}.ai-list li{margin:5px 0;color:#b8c8d9}
+.flow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center}.flow div{padding:14px;border-radius:13px;background:#ffffff09;border:1px solid #ffffff18;text-align:center;font-size:.85rem}.arrow{color:var(--accent);font-size:24px}
+.compare{width:100%;border-collapse:collapse}.compare td,.compare th{padding:11px;border:1px solid #ffffff12;text-align:left}.compare th{background:#ffffff09}
+footer{text-align:center;color:var(--muted);padding:35px;font-size:.82rem}
+@media(max-width:1100px){.cards{grid-template-columns:repeat(2,1fr)}.grid-main{grid-template-columns:1fr}.charts{grid-template-columns:1fr}}
+@media(max-width:650px){.cards{grid-template-columns:1fr}.settings{grid-template-columns:1fr}.navlinks{display:none}.hero{padding-top:30px}.house-wrap{justify-content:flex-start}.charts{grid-template-columns:1fr}}
 </style>
-
 </head>
 <body>
-<!-- =========================
-     MAIN CONTAINER
-========================= -->
-<div class="max-w-7xl mx-auto px-4 py-6">
-<!-- =========================
-     HEADER
-========================= -->
-<header class="glass hero-glow rounded-[30px] p-6 md:p-10 mb-6">
-<div class="flex flex-col xl:flex-row gap-8 xl:items-center xl:justify-between">
-<!-- LEFT -->
-<div class="max-w-4xl">
-<div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-400/20 text-emerald-300 text-xs font-black uppercase tracking-wider">
-<i class="w-4 h-4" data-lucide="zap"></i>
-
-
-Teacher Tech Championship 2026
-
-
-</div>
-<h1 class="text-4xl md:text-6xl font-black mt-5">
-
-SAVER-KIT
-
-</h1>
-<h2 class="text-xl md:text-3xl font-black text-emerald-300 mt-2">
-
-Smart Energy Virtual Simulator &amp; Sensor Kit
-
-</h2>
-<p class="text-slate-300 leading-relaxed mt-5 max-w-4xl">
-
-SAVER-KIT merupakan inovasi pembelajaran
-berbasis teknologi yang mengintegrasikan
-
-<strong class="text-white">
-
-Portal Simulasi Energi Virtual
-
-</strong>
-
-dengan
-
-<strong class="text-emerald-300">
-
-Eco-Sensor Kit
-
-</strong>
-
-untuk membantu siswa memahami penggunaan energi listrik,
-menganalisis pemborosan,
-menghitung biaya,
-serta merancang solusi penghematan energi
-berbasis sensor digital.
-
-</p>
-<!-- TAG -->
-<div class="flex flex-wrap gap-2 mt-6">
-<span class="px-4 py-2 rounded-xl bg-slate-900/70 border border-slate-700 text-sm font-bold">
-
-🏫 SMA Negeri 2 Bitung
-
-</span>
-<span class="px-4 py-2 rounded-xl bg-slate-900/70 border border-slate-700 text-sm font-bold">
-
-👨‍💻 TARSIUS EDUTECH
-
-</span>
-<span class="px-4 py-2 rounded-xl bg-slate-900/70 border border-slate-700 text-sm font-bold">
-
-🌱 Smart Energy Learning
-
-</span>
-</div>
-</div>
-<!-- RIGHT -->
-<div class="grid grid-cols-2 gap-3 min-w-[280px]">
-<div class="glass rounded-2xl p-5 text-center">
-<div class="text-3xl font-black text-yellow-300">
-
-4
-
-</div>
-<div class="text-xs text-slate-400 font-bold mt-1">
-
-SIMULASI
-
-</div>
-</div>
-<div class="glass rounded-2xl p-5 text-center">
-<div class="text-3xl font-black text-emerald-300">
-
-AUTO
-
-</div>
-<div class="text-xs text-slate-400 font-bold mt-1">
-
-ENERGI
-
-</div>
-</div>
-<div class="glass rounded-2xl p-5 text-center">
-<div class="text-3xl font-black text-sky-300">
-
-STEM
-
-</div>
-<div class="text-xs text-slate-400 font-bold mt-1">
-
-LEARNING
-
-</div>
-</div>
-<div class="glass rounded-2xl p-5 text-center">
-<div class="text-3xl font-black text-purple-300">
-
-8+
-
-</div>
-<div class="text-xs text-slate-400 font-bold mt-1">
-
-MAPEL
-
-</div>
-</div>
-</div>
-</div>
-</header>
-<!-- =========================
-     NAVIGATION
-========================= -->
-<nav class="glass rounded-2xl p-4 mb-6">
-<div class="flex flex-wrap gap-5 justify-center text-sm font-bold text-slate-300">
-<a class="nav-link" href="#simulasi">
-
-Simulasi
-
-</a>
-<a class="nav-link" href="#dashboard">
-
-Dashboard Energi
-
-</a>
-<a class="nav-link" href="#lintasmapel">
-
-Lintas Mapel
-
-</a>
-<a class="nav-link" href="#stem">
-
-STEM
-
-</a>
-<a class="nav-link" href="#deeplearning">
-
-Deep Learning
-
-</a>
-<a class="nav-link" href="#auditenergi">
-
-Audit Energi
-
-</a>
-<a class="nav-link" href="#ecosensor">
-
-Eco-Sensor Kit
-
-</a>
-<a class="nav-link" href="#projekaktivitas">
-
-Projek Siswa
-
-</a>
-<a class="nav-link" href="#realtime">
-
-Arduino Real-Time
-
-</a>
-<button aria-label="Ubah mode tampilan" class="theme-toggle" id="themeToggle" title="Ubah mode tampilan" type="button">
-<i class="theme-icon" data-lucide="moon" id="themeIcon"></i>
-<span id="themeText">
-
-Mode Gelap
-
-</span>
-</button>
-</div>
+<nav>
+  <div class="brand">⚡ SMART <span>HOME ENERGY</span></div>
+  <div class="navlinks"><a href="#home">Home</a><a href="#denah">Denah Rumah</a><a href="#monitoring">Monitoring</a><a href="#analisis">Analisis</a><a href="#cara">Cara Kerja</a></div>
 </nav>
-<!-- =========================
-     MAIN VIEW
-========================= -->
-<section class="fade-in" id="menuView"><div class="sidebar-app"><aside class="sidebar-menu"><div class="sidebar-brand"><div class="sidebar-brand-icon"><i class="w-6 h-6" data-lucide="zap"></i></div><div><h3>SAVER-KIT</h3><p>Pilih menu untuk membuka konten</p></div></div><nav aria-label="Menu SAVER-KIT" class="sidebar-nav"><button class="sidebar-link active" data-target="beranda" type="button"><i class="w-5 h-5" data-lucide="house"></i>Beranda</button><button class="sidebar-link" data-target="simulasi" type="button"><i class="w-5 h-5" data-lucide="play-circle"></i>Simulasi Energi</button><button class="sidebar-link" data-target="dashboard" type="button"><i class="w-5 h-5" data-lucide="calculator"></i>Kalkulator Energi</button><div class="learning-menu-group" id="learningMenuGroup">
-<button class="learning-menu-toggle" id="learningMenuToggle" type="button" aria-expanded="false">
-<i class="w-5 h-5" data-lucide="graduation-cap"></i>
-<span>Pembelajaran &amp; Projek</span>
-<i class="w-4 h-4 submenu-arrow" data-lucide="chevron-down"></i>
-</button>
-<div class="learning-submenu">
-<button class="sidebar-link" data-target="lintasmapel" type="button"><i class="w-5 h-5" data-lucide="network"></i>Lintas Mata Pelajaran</button>
-<button class="sidebar-link" data-target="stem" type="button"><i class="w-5 h-5" data-lucide="atom"></i>Integrasi STEM</button>
-<button class="sidebar-link" data-target="deeplearning" type="button"><i class="w-5 h-5" data-lucide="brain"></i>Deep Learning</button>
-<button class="sidebar-link" data-target="projekaktivitas" type="button"><i class="w-5 h-5" data-lucide="folder-kanban"></i>Projek Aktivitas</button>
-</div>
-</div><button class="sidebar-link" data-target="advancedAnalytics" type="button"><i class="w-5 h-5" data-lucide="bar-chart-3"></i>Analitik Energi</button><button class="sidebar-link" data-target="auditenergi" type="button"><i class="w-5 h-5" data-lucide="clipboard-check"></i>Audit Energi</button><button class="sidebar-link" data-target="ecosensor" type="button"><i class="w-5 h-5" data-lucide="cpu"></i>Eco-Sensor Kit</button><button class="sidebar-link" data-target="realtime" type="button"><i class="w-5 h-5" data-lucide="radio"></i>IoT Real-Time</button><button class="sidebar-link" data-target="timPengembang" type="button"><i class="w-5 h-5" data-lucide="users"></i>Tim Pengembang</button></nav></aside><div class="sidebar-content"><div class="welcome-panel active" id="beranda"><div class="welcome-card"><div class="welcome-icon"><i class="w-10 h-10" data-lucide="layout-dashboard"></i></div><h2>Selamat Datang di SAVER-KIT</h2><p></p><div class="welcome-grid"><div><strong>🧭 Mudah Dijelajahi</strong><span>Akses setiap fitur dan informasi dengan navigasi yang sederhana dan nyaman.</span></div><div><strong>⚡ Interaktif & Inovatif</strong><span>Nikmati berbagai simulasi, kalkulator, dan aktivitas yang dapat digunakan secara langsung.</span></div><div><strong>📚 Lengkap & Terintegrasi</strong><span>Seluruh fitur SAVER-KIT tersedia dalam satu platform yang terstruktur dan mudah diakses.</span></div></div></div></div><div class="app-panel" data-panel="simulasi"><section class="mb-10" id="simulasi">
-<div class="mb-6">
-<div class="text-emerald-300 text-xs uppercase font-black tracking-[.2em]">
-
-Interactive Simulation
-
-</div>
-<h2 class="text-3xl font-black mt-2">
-
-Eksplorasi Sistem Energi Sekolah
-
-</h2>
-<p class="text-slate-400 mt-2">
-
-Bandingkan penggunaan energi listrik
-pada sistem manual dan sistem otomatis
-berbasis sensor digital.
-
-</p>
-</div>
-<!-- GRID -->
-<div class="grid md:grid-cols-2 xl:grid-cols-4 gap-5">
-<!-- =====================
-     ANALOG
-===================== -->
-<article class="menu-card glass rounded-[28px] p-5">
-<div class="flex justify-between items-center mb-4">
-<div class="w-14 h-14 rounded-2xl bg-yellow-400 flex items-center justify-center">
-<i class="w-7 h-7 text-slate-900" data-lucide="lightbulb"></i>
-</div>
-<span class="text-xs font-black text-yellow-300">
-
-MANUAL
-
-</span>
-</div>
-<h3 class="text-xl font-black">
-
-Ruang Kelas Analog
-
-</h3>
-<p class="text-sm text-slate-400 mt-3 leading-relaxed">
-
-Simulasi penggunaan lampu
-dengan sakelar manual.
-
-Lampu dapat tetap menyala
-walaupun kelas kosong
-atau cahaya alami sudah cukup.
-
-</p>
-<div class="scene-mini mt-5">
-<div class="absolute top-5 left-[20%]">
-<div class="light-dot"></div>
-</div>
-<div class="absolute top-5 left-[48%]">
-<div class="light-dot"></div>
-</div>
-<div class="absolute top-5 left-[75%]">
-<div class="light-dot"></div>
-</div>
-<div class="absolute bottom-6 left-6 right-6 grid grid-cols-3 gap-3">
-<div class="bg-stone-600 rounded-lg h-12"></div>
-<div class="bg-stone-600 rounded-lg h-12"></div>
-<div class="bg-stone-600 rounded-lg h-12"></div>
-</div>
-</div>
-<button class="open-sim w-full mt-5 bg-yellow-400 hover:bg-yellow-300 text-slate-900 py-3 rounded-2xl font-black" data-title="Simulasi Ruang Kelas Analog" data-url="https://fredynandustakalamingan.github.io/simulasi-listrik-analog/">
-
-▶ Buka Simulasi
-
-</button>
-</article>
-<!-- =====================
-     SMART CLASS
-===================== -->
-<article class="menu-card glass rounded-[28px] p-5">
-<div class="flex justify-between items-center mb-4">
-<div class="w-14 h-14 rounded-2xl bg-emerald-400 flex items-center justify-center">
-<i class="w-7 h-7 text-slate-900" data-lucide="radar"></i>
-</div>
-<span class="text-xs font-black text-emerald-300">
-
-PIR + LDR
-
-</span>
-</div>
-<h3 class="text-xl font-black">
-
-Ruang Kelas Pintar
-
-</h3>
-<p class="text-sm text-slate-400 mt-3 leading-relaxed">
-
-Simulasi penerangan otomatis
-berbasis sensor gerak PIR
-dan sensor cahaya LDR.
-
-</p>
-<div class="scene-mini mt-5">
-<div class="sensor-ring w-16 h-16 top-8 left-[20%]"></div>
-<div class="sensor-ring w-16 h-16 top-8 left-[50%]"></div>
-<div class="light-dot top-5 left-[25%]"></div>
-<div class="light-dot top-5 left-[55%]"></div>
-<div class="mini-person left-[35%] bottom-8"></div>
-<div class="mini-person left-[65%] bottom-10"></div>
-</div>
-<button class="open-sim w-full mt-5 bg-emerald-500 hover:bg-emerald-400 text-slate-900 py-3 rounded-2xl font-black" data-title="Simulasi Ruang Kelas Pintar" data-url="https://fredynandustakalamingan.github.io/simulasi-listrik-sensor/">
-
-▶ Buka Simulasi
-
-</button>
-</article>
-<!-- =====================
-     LORONG
-===================== -->
-<article class="menu-card glass rounded-[28px] p-5">
-<div class="flex justify-between items-center mb-4">
-<div class="w-14 h-14 rounded-2xl bg-sky-400 flex items-center justify-center">
-<i class="w-7 h-7 text-slate-900" data-lucide="school"></i>
-</div>
-<span class="text-xs font-black text-sky-300">
-
-SMART
-
-</span>
-</div>
-<h3 class="text-xl font-black">
-
-Lorong Sekolah Pintar
-
-</h3>
-<p class="text-sm text-slate-400 mt-3 leading-relaxed">
-
-Lampu lorong merespons
-pergerakan pengguna
-dan dapat mati otomatis
-ketika area tidak digunakan.
-
-</p>
-<div class="scene-mini mt-5">
-<div class="absolute top-0 bottom-0 left-[35%] right-[35%] bg-slate-700/40"></div>
-<div class="light-dot top-5 left-[42%]"></div>
-<div class="light-dot top-5 left-[57%]"></div>
-<div class="sensor-ring w-20 h-20 top-10 left-[37%]"></div>
-<div class="mini-person left-[48%] bottom-8"></div>
-</div>
-<button class="open-sim w-full mt-5 bg-sky-500 hover:bg-sky-400 text-slate-900 py-3 rounded-2xl font-black" data-title="Simulasi Lorong Sekolah Pintar" data-url="https://fredynandustakalamingan.github.io/simulasi-sensor-lorong/">
-
-▶ Buka Simulasi
-
-</button>
-</article>
-<!-- =====================
-     SIMULASI RUMAH
-===================== -->
-<article class="menu-card glass rounded-[28px] p-5">
-<div class="flex justify-between items-center mb-4">
-<div class="w-14 h-14 rounded-2xl bg-purple-300 flex items-center justify-center">
-<i class="w-7 h-7 text-slate-900" data-lucide="house"></i>
-</div>
-<span class="text-xs font-black text-purple-300">
-RUMAH
-</span>
-</div>
-<h3 class="text-xl font-black">
-Simulasi Listrik Rumah
-</h3>
-<p class="text-sm text-slate-400 mt-3 leading-relaxed">
-Eksplorasi penggunaan energi listrik di rumah, mulai dari lampu hingga peralatan elektronik, serta hitung energi dan biaya listrik.
-</p>
-<div class="scene-mini mt-5">
-<div class="absolute inset-x-8 bottom-6 h-16 bg-slate-700/40 rounded-t-[28px]"></div>
-<div class="absolute bottom-[64px] left-[32%] w-24 h-14 bg-slate-700/40 rounded-t-xl"></div>
-<div class="absolute bottom-[92px] left-[43%] w-7 h-10 bg-purple-300/70 rounded-t-lg"></div>
-<div class="light-dot top-7 left-[28%]"></div>
-<div class="light-dot top-7 left-[58%]"></div>
-</div>
-<button class="open-sim w-full mt-5 bg-purple-300 hover:bg-purple-200 text-slate-900 py-3 rounded-2xl font-black" data-title="Simulasi Listrik Rumah" data-url="https://fredynandustakalamingan.github.io/Simulasi-Listrik-Rumah/">
-▶ Buka Simulasi
-</button>
-</article>
-</div>
-</section></div><div class="app-panel" data-panel="dashboard"><section class="mb-10" id="dashboard">
-<div class="glass rounded-[30px] p-6 md:p-8">
-<!-- TITLE -->
-<div class="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-8">
-<div>
-<div class="text-xs uppercase font-black text-yellow-300 tracking-[.2em]">
-
-Smart Energy Dashboard
-
-</div>
-<h2 class="text-3xl font-black mt-2">
-
-Kalkulator Energi &amp; Biaya Otomatis
-
-</h2>
-<p class="text-slate-400 mt-2 max-w-3xl">
-
-Masukkan data penggunaan listrik
-untuk menghitung konsumsi energi,
-biaya listrik,
-dan potensi penghematan
-pada sistem otomatis SAVER-KIT.
-
-</p>
-</div>
-<button class="bg-emerald-500 hover:bg-emerald-400 text-slate-900 px-6 py-3 rounded-2xl font-black" onclick="calculateEnergy()">
-
-⚡ Hitung Energi
-
-</button>
-</div>
-<!-- INPUT -->
-<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-<!-- DAYA -->
-<div>
-<label class="text-sm font-bold text-slate-300">
-
-Daya Lampu
-
-</label>
-<input class="energy-input mt-2" id="power" type="number" value="18"/>
-<div class="text-xs text-slate-500 mt-1">
-
-Watt
-
-</div>
-</div>
-<!-- JUMLAH -->
-<div>
-<label class="text-sm font-bold text-slate-300">
-
-Jumlah Lampu
-
-</label>
-<input class="energy-input mt-2" id="quantity" type="number" value="10"/>
-<div class="text-xs text-slate-500 mt-1">
-
-Unit
-
-</div>
-</div>
-<!-- HOURS -->
-<div>
-<label class="text-sm font-bold text-slate-300">
-
-Jam Penggunaan / Hari
-
-</label>
-<input class="energy-input mt-2" id="hours" type="number" value="8"/>
-<div class="text-xs text-slate-500 mt-1">
-
-Jam
-
-</div>
-</div>
-<!-- DAYS -->
-<div>
-<label class="text-sm font-bold text-slate-300">
-
-Hari Penggunaan / Bulan
-
-</label>
-<input class="energy-input mt-2" id="days" type="number" value="22"/>
-<div class="text-xs text-slate-500 mt-1">
-
-Hari
-
-</div>
-</div>
-<!-- TARIFF -->
-<div>
-<label class="text-sm font-bold text-slate-300">
-
-Tarif Listrik
-
-</label>
-<input class="energy-input mt-2" id="tariff" type="number" value="1500"/>
-<div class="text-xs text-slate-500 mt-1">
-
-Rp / kWh
-
-</div>
-</div>
-<!-- SENSOR -->
-<div>
-<label class="text-sm font-bold text-slate-300">
-
-Efisiensi Sensor
-
-</label>
-<input class="energy-input mt-2" id="efficiency" type="number" value="35"/>
-<div class="text-xs text-slate-500 mt-1">
-
-Persen %
-
-</div>
-</div>
-</div>
-<!-- RESULT -->
-<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
-<!-- ANALOG -->
-<div class="result-card">
-<div class="text-yellow-300 text-sm font-black">
-
-⚡ SISTEM ANALOG
-
-</div>
-<div class="text-3xl font-black mt-3" id="analogEnergy">
-
-0 kWh
-
-</div>
-<div class="text-sm text-slate-400 mt-2" id="analogCost">
-
-Rp 0
-
-</div>
-</div>
-<!-- SMART -->
-<div class="result-card">
-<div class="text-emerald-300 text-sm font-black">
-
-🤖 SISTEM SENSOR
-
-</div>
-<div class="text-3xl font-black mt-3" id="smartEnergy">
-
-0 kWh
-
-</div>
-<div class="text-sm text-slate-400 mt-2" id="smartCost">
-
-Rp 0
-
-</div>
-</div>
-<!-- SAVING -->
-<div class="result-card">
-<div class="text-sky-300 text-sm font-black">
-
-📉 PENGHEMATAN
-
-</div>
-<div class="text-3xl font-black mt-3" id="savingEnergy">
-
-0 kWh
-
-</div>
-<div class="text-sm text-slate-400 mt-2" id="savingCost">
-
-Rp 0
-
-</div>
-</div>
-<!-- PERCENT -->
-<div class="result-card">
-<div class="text-purple-300 text-sm font-black">
-
-🌱 EFISIENSI
-
-</div>
-<div class="text-3xl font-black mt-3" id="savingPercent">
-
-0 %
-
-</div>
-<div class="text-sm text-slate-400 mt-2">
-
-Potensi pengurangan energi
-
-</div>
-</div>
-</div>
-<!-- =========================
-     DASHBOARD 3 AREA
-========================= -->
-<div class="mt-10">
-<div class="flex items-center gap-3 mb-5">
-<i class="text-emerald-300" data-lucide="bar-chart-3"></i>
-<h3 class="text-2xl font-black">
-
-Dashboard 3 Area SAVER-KIT
-
-</h3>
-</div>
-<div class="grid lg:grid-cols-3 gap-5">
-<!-- AREA 1 -->
-<div class="bg-slate-900/70 border border-slate-700 rounded-2xl p-5">
-<div class="flex justify-between">
-<h4 class="font-black">
-
-💡 Ruang Analog
-
-</h4>
-<span class="text-yellow-300 font-bold">
-
-Manual
-
-</span>
-</div>
-<div class="mt-5 space-y-3">
-<div class="flex justify-between text-sm">
-<span class="text-slate-400">
-
-Energi
-
-</span>
-<span class="font-bold" id="areaAnalogEnergy">
-
-0 kWh
-
-</span>
-</div>
-<div class="flex justify-between text-sm">
-<span class="text-slate-400">
-
-Biaya
-
-</span>
-<span class="font-bold" id="areaAnalogCost">
-
-Rp 0
-
-</span>
-</div>
-</div>
-</div>
-<!-- AREA 2 -->
-<div class="bg-slate-900/70 border border-slate-700 rounded-2xl p-5">
-<div class="flex justify-between">
-<h4 class="font-black">
-
-🤖 Kelas Pintar
-
-</h4>
-<span class="text-emerald-300 font-bold">
-
-PIR + LDR
-
-</span>
-</div>
-<div class="mt-5 space-y-3">
-<div class="flex justify-between text-sm">
-<span class="text-slate-400">
-
-Energi
-
-</span>
-<span class="font-bold" id="areaSmartEnergy">
-
-0 kWh
-
-</span>
-</div>
-<div class="flex justify-between text-sm">
-<span class="text-slate-400">
-
-Biaya
-
-</span>
-<span class="font-bold" id="areaSmartCost">
-
-Rp 0
-
-</span>
-</div>
-</div>
-</div>
-<!-- AREA 3 -->
-<div class="bg-slate-900/70 border border-slate-700 rounded-2xl p-5">
-<div class="flex justify-between">
-<h4 class="font-black">
-
-🏫 Lorong Pintar
-
-</h4>
-<span class="text-sky-300 font-bold">
-
-Sensor
-
-</span>
-</div>
-<div class="mt-5 space-y-3">
-<div class="flex justify-between text-sm">
-<span class="text-slate-400">
-
-Energi
-
-</span>
-<span class="font-bold" id="areaCorridorEnergy">
-
-0 kWh
-
-</span>
-</div>
-<div class="flex justify-between text-sm">
-<span class="text-slate-400">
-
-Potensi Hemat
-
-</span>
-<span class="font-bold text-emerald-300" id="areaCorridorSaving">
-
-0 %
-
-</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-<!-- TOTAL DASHBOARD -->
-<div class="mt-6 rounded-3xl bg-gradient-to-r from-emerald-500/15 via-slate-900 to-sky-500/15 border border-emerald-400/15 p-6">
-<div class="grid md:grid-cols-3 gap-5">
-<div>
-<div class="text-sm text-slate-400">
-
-Total Energi Sebelum
-
-</div>
-<div class="text-3xl font-black text-yellow-300 mt-2" id="totalBefore">
-
-0 kWh
-
-</div>
-</div>
-<div>
-<div class="text-sm text-slate-400">
-
-Total Energi Sesudah
-
-</div>
-<div class="text-3xl font-black text-emerald-300 mt-2" id="totalAfter">
-
-0 kWh
-
-</div>
-</div>
-<div>
-<div class="text-sm text-slate-400">
-
-Potensi Penghematan
-
-</div>
-<div class="text-3xl font-black text-sky-300 mt-2" id="totalSaving">
-
-Rp 0
-
-</div>
-</div>
-</div>
-</div>
-</div>
-</section></div><div class="app-panel" data-panel="lintasmapel"><section class="mb-10" id="lintasmapel">
-<div class="mb-6">
-<div class="text-xs uppercase font-black tracking-[.2em] text-purple-300">
-
-Interdisciplinary Learning
-
-</div>
-<h2 class="text-3xl font-black mt-2">
-
-Menu Lintas Mata Pelajaran
-
-</h2>
-<p class="text-slate-400 mt-2 max-w-4xl">
-
-SAVER-KIT tidak hanya digunakan
-dalam pembelajaran Fisika.
-
-Data energi,
-sensor,
-lingkungan,
-biaya,
-dan hasil pengamatan
-dapat dikembangkan menjadi
-pembelajaran lintas mata pelajaran.
-
-</p>
-</div>
-<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
-<!-- FISIKA -->
-<div class="menu-card glass rounded-2xl p-5">
-<div class="text-yellow-300 mb-3">
-
-⚡
-
-</div>
-<h3 class="font-black text-lg">
-
-Fisika
-
-</h3>
-<p class="text-sm text-slate-400 mt-3">
-
-Menganalisis daya,
-energi listrik,
-beda potensial,
-arus listrik,
-efisiensi,
-sensor PIR
-dan LDR.
-
-</p>
-</div>
-<!-- MATEMATIKA -->
-<div class="menu-card glass rounded-2xl p-5">
-<div class="text-blue-300 mb-3">
-
-📐
-
-</div>
-<h3 class="font-black text-lg">
-
-Matematika
-
-</h3>
-<p class="text-sm text-slate-400 mt-3">
-
-Mengolah data energi,
-menghitung persentase,
-membandingkan grafik,
-dan menganalisis
-potensi penghematan.
-
-</p>
-</div>
-<!-- INFORMATIKA -->
-<div class="menu-card glass rounded-2xl p-5">
-<div class="text-emerald-300 mb-3">
-
-💻
-
-</div>
-<h3 class="font-black text-lg">
-
-Informatika
-
-</h3>
-<p class="text-sm text-slate-400 mt-3">
-
-Mempelajari coding,
-sensor digital,
-microcontroller,
-IoT,
-pengolahan data
-dan desain sistem otomatis.
-
-</p>
-</div>
-<!-- BIOLOGI -->
-<div class="menu-card glass rounded-2xl p-5">
-<div class="text-green-300 mb-3">
-
-🌱
-
-</div>
-<h3 class="font-black text-lg">
-
-Biologi
-
-</h3>
-<p class="text-sm text-slate-400 mt-3">
-
-Mengkaji hubungan
-efisiensi energi
-dengan lingkungan,
-keberlanjutan
-dan kualitas ekosistem.
-
-</p>
-</div>
-<!-- GEOGRAFI -->
-<div class="menu-card glass rounded-2xl p-5">
-<div class="text-sky-300 mb-3">
-
-🌍
-
-</div>
-<h3 class="font-black text-lg">
-
-Geografi
-
-</h3>
-<p class="text-sm text-slate-400 mt-3">
-
-Menganalisis
-konsumsi energi,
-lingkungan sekolah,
-perubahan iklim
-dan pembangunan berkelanjutan.
-
-</p>
-</div>
-<!-- EKONOMI -->
-<div class="menu-card glass rounded-2xl p-5">
-<div class="text-yellow-300 mb-3">
-
-💰
-
-</div>
-<h3 class="font-black text-lg">
-
-Ekonomi
-
-</h3>
-<p class="text-sm text-slate-400 mt-3">
-
-Menganalisis biaya listrik,
-efisiensi anggaran,
-penghematan
-dan dampak ekonomi
-penggunaan teknologi.
-
-</p>
-</div>
-<!-- BAHASA -->
-<div class="menu-card glass rounded-2xl p-5">
-<div class="text-pink-300 mb-3">
-
-📝
-
-</div>
-<h3 class="font-black text-lg">
-
-Bahasa Indonesia
-
-</h3>
-<p class="text-sm text-slate-400 mt-3">
-
-Menyusun laporan,
-artikel,
-argumentasi,
-presentasi
-dan rekomendasi
-berbasis data.
-
-</p>
-</div>
-<!-- PPKN -->
-<div class="menu-card glass rounded-2xl p-5">
-<div class="text-red-300 mb-3">
-
-🇮🇩
-
-</div>
-<h3 class="font-black text-lg">
-
-PPKn
-
-</h3>
-<p class="text-sm text-slate-400 mt-3">
-
-Mengembangkan
-tanggung jawab,
-kepedulian lingkungan,
-gotong royong
-dan budaya hemat energi.
-
-</p>
-</div>
-</div>
-<!-- PROJECT -->
-<div class="glass rounded-[28px] p-6 mt-6">
-<div class="flex items-center gap-3 mb-4">
-<i class="text-emerald-300" data-lucide="rocket"></i>
-<h3 class="text-xl font-black">
-
-Proyek Kolaborasi Lintas Mata Pelajaran
-
-</h3>
-</div>
-<div class="grid md:grid-cols-4 gap-4">
-<div class="bg-slate-900/70 rounded-xl p-4">
-<strong class="text-yellow-300">
-
-01
-
-</strong>
-<p class="text-sm mt-2 text-slate-400">
-
-Audit penggunaan listrik
-di lingkungan sekolah.
-
-</p>
-</div>
-<div class="bg-slate-900/70 rounded-xl p-4">
-<strong class="text-emerald-300">
-
-02
-
-</strong>
-<p class="text-sm mt-2 text-slate-400">
-
-Analisis data konsumsi
-dan biaya listrik.
-
-</p>
-</div>
-<div class="bg-slate-900/70 rounded-xl p-4">
-<strong class="text-sky-300">
-
-03
-
-</strong>
-<p class="text-sm mt-2 text-slate-400">
-
-Merancang solusi
-Smart Energy
-berbasis sensor.
-
-</p>
-</div>
-<div class="bg-slate-900/70 rounded-xl p-4">
-<strong class="text-purple-300">
-
-04
-
-</strong>
-<p class="text-sm mt-2 text-slate-400">
-
-Presentasi rekomendasi
-Smart School Energy.
-
-</p>
-</div>
-</div>
-</div>
-</section></div><div class="app-panel" data-panel="stem"><section class="mb-10" id="stem">
-<div class="glass rounded-[30px] p-6">
-<h2 class="text-3xl font-black">
-
-Integrasi STEM
-
-</h2>
-<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-<div class="bg-slate-900/70 rounded-2xl p-5">
-<h3 class="font-black text-emerald-300">
-
-S — Science
-
-</h3>
-<p class="text-sm text-slate-400 mt-3">
-
-Konsep listrik,
-energi,
-daya,
-sensor
-dan efisiensi.
-
-</p>
-</div>
-<div class="bg-slate-900/70 rounded-2xl p-5">
-<h3 class="font-black text-yellow-300">
-
-T — Technology
-
-</h3>
-<p class="text-sm text-slate-400 mt-3">
-
-Portal web,
-sensor digital,
-microcontroller
-dan otomatisasi.
-
-</p>
-</div>
-<div class="bg-slate-900/70 rounded-2xl p-5">
-<h3 class="font-black text-sky-300">
-
-E — Engineering
-
-</h3>
-<p class="text-sm text-slate-400 mt-3">
-
-Merancang sistem,
-sensor,
-prototype
-dan solusi teknologi.
-
-</p>
-</div>
-<div class="bg-slate-900/70 rounded-2xl p-5">
-<h3 class="font-black text-purple-300">
-
-M — Mathematics
-
-</h3>
-<p class="text-sm text-slate-400 mt-3">
-
-Perhitungan energi,
-biaya,
-persentase
-dan analisis data.
-
-</p>
-</div>
-</div>
-</div>
-</section></div><div class="app-panel" data-panel="deeplearning"><section class="mb-10" id="deeplearning">
-<div class="grid md:grid-cols-3 gap-5">
-<!-- MEANINGFUL -->
-<div class="glass rounded-[26px] p-6">
-<div class="text-emerald-300 text-3xl">
-
-❤️
-
-</div>
-<h3 class="text-xl font-black mt-4">
-
-Meaningful
-
-</h3>
-<p class="text-slate-400 text-sm mt-3">
-
-Pembelajaran dikaitkan
-dengan masalah nyata
-penggunaan energi
-di sekolah.
-
-</p>
-</div>
-<!-- MINDFUL -->
-<div class="glass rounded-[26px] p-6">
-<div class="text-sky-300 text-3xl">
-
-👁
-
-</div>
-<h3 class="text-xl font-black mt-4">
-
-Mindful
-
-</h3>
-<p class="text-slate-400 text-sm mt-3">
-
-Siswa mengamati,
-menganalisis,
-mengambil keputusan
-dan merefleksikan
-hasil pembelajaran.
-
-</p>
-</div>
-<!-- JOYFUL -->
-<div class="glass rounded-[26px] p-6">
-<div class="text-yellow-300 text-3xl">
-
-😊
-
-</div>
-<h3 class="text-xl font-black mt-4">
-
-Joyful
-
-</h3>
-<p class="text-slate-400 text-sm mt-3">
-
-Simulasi interaktif,
-sensor,
-animasi
-dan eksperimen
-membuat pembelajaran
-lebih menarik.
-
-</p>
-</div>
-</div>
-<!-- LEARNING FLOW -->
-<div class="glass rounded-[30px] p-6 mt-6">
-<h3 class="text-2xl font-black mb-6">
-
-Alur Pembelajaran SAVER-KIT
-
-</h3>
-<div class="grid md:grid-cols-4 gap-4">
-<div class="bg-slate-900/70 rounded-2xl p-5">
-<div class="text-emerald-300 font-black">
-
-01
-
-</div>
-<h4 class="font-black mt-2">
-
-OBSERVE
-
-</h4>
-<p class="text-sm text-slate-400 mt-2">
-
-Mengamati masalah
-energi di sekolah.
-
-</p>
-</div>
-<div class="bg-slate-900/70 rounded-2xl p-5">
-<div class="text-yellow-300 font-black">
-
-02
-
-</div>
-<h4 class="font-black mt-2">
-
-APPLY
-
-</h4>
-<p class="text-sm text-slate-400 mt-2">
-
-Menerapkan konsep
-dalam simulasi.
-
-</p>
-</div>
-<div class="bg-slate-900/70 rounded-2xl p-5">
-<div class="text-sky-300 font-black">
-
-03
-
-</div>
-<h4 class="font-black mt-2">
-
-CALCULATE
-
-</h4>
-<p class="text-sm text-slate-400 mt-2">
-
-Menghitung energi
-dan biaya listrik.
-
-</p>
-</div>
-<div class="bg-slate-900/70 rounded-2xl p-5">
-<div class="text-purple-300 font-black">
-
-04
-
-</div>
-<h4 class="font-black mt-2">
-
-VERIFY
-
-</h4>
-<p class="text-sm text-slate-400 mt-2">
-
-Menguji solusi
-menggunakan sensor kit.
-
-</p>
-</div>
-</div>
-</div>
-</section></div><div class="app-panel" data-panel="advancedAnalytics"><section class="mb-10" id="advancedAnalytics">
-<div class="advanced-panel rounded-[30px] p-6 md:p-8">
-<div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5 mb-8">
-<div>
-<div class="text-xs uppercase font-black text-emerald-300 tracking-[.2em]">
-
-Integrated SAVER-KIT Analytics
-
-</div>
-<h2 class="text-3xl font-black mt-2">
-
-📊 Dashboard Analitik Energi Sekolah
-
-</h2>
-<p class="text-slate-400 mt-3 max-w-4xl">
-
-Seluruh perhitungan sistem Analog dan Smart Energy diintegrasikan dalam satu dashboard untuk membaca pola penggunaan energi, efisiensi, target penghematan, dan status energi sekolah.
-
-</p>
-</div>
-<div class="flex flex-wrap gap-3 no-print">
-<button class="action-btn primary" onclick="generateEnergyReport()" type="button">
-
-📄 Generate Laporan Energi
-
-</button>
-</div>
-</div>
-<div class="grid xl:grid-cols-3 gap-5">
-<!-- CHART -->
-<div class="analytics-card xl:col-span-2">
-<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-<div>
-<h3 class="text-xl font-black">
-
-📈 Grafik Batang Analog vs Smart Energy
-
-</h3>
-<p class="text-sm text-slate-400 mt-2">
-
-Perbandingan estimasi penggunaan energi per hari selama satu minggu.
-
-</p>
-</div>
-<div class="text-xs font-black text-slate-400">
-
-Data mengikuti Kalkulator Energi SAVER-KIT
-
-</div>
-</div>
-<div class="bar-chart" id="energyBarChart"></div>
-<div class="chart-legend">
-<span><i class="legend-dot legend-analog"></i>Analog</span>
-<span><i class="legend-dot legend-smart"></i>Smart Energy</span>
-</div>
-</div>
-<!-- SCORE -->
-<div class="analytics-card">
-<h3 class="text-xl font-black">
-
-🏆 Skor Efisiensi Energi Sekolah
-
-</h3>
-<div class="gauge-wrap mt-5">
-<div class="energy-gauge">
-<div>
-<div class="text-3xl font-black" id="efficiencyScore">
-
-0
-
-</div>
-<div class="text-xs text-slate-400">
-
-/ 100
-
-</div>
-</div>
-</div>
-<div>
-<div class="status-badge status-enough" id="energyStatus">
-
-🟡 CUKUP
-
-</div>
-<p class="text-sm text-slate-400 mt-4" id="statusDescription">
-
-Menghitung efisiensi energi sekolah...
-
-</p>
-</div>
-</div>
-<div class="mt-6 text-sm text-slate-400">
-
-Status otomatis:
-
-<div class="flex flex-wrap gap-3 mt-3">
-<span class="status-badge status-efficient">🟢 Efisien ≥ 60%</span>
-<span class="status-badge status-enough">🟡 Cukup 30–59%</span>
-<span class="status-badge status-waste">🔴 Boros &lt; 30%</span>
-</div>
-</div>
-</div>
-</div>
-<!-- TARGET -->
-<div class="analytics-card mt-5">
-<div class="grid lg:grid-cols-3 gap-6 lg:items-center">
-<div>
-<h3 class="text-xl font-black">
-
-🎯 Target Penghematan Bulanan
-
-</h3>
-<p class="text-sm text-slate-400 mt-2">
-
-Target default ditetapkan sebesar 30% dan dapat dibandingkan langsung dengan hasil simulasi.
-
-</p>
-</div>
-<div>
-<div class="flex justify-between text-sm font-bold mb-2">
-<span>Progres Penghematan</span>
-<span id="targetProgressText">0% / 30%</span>
-</div>
-<div class="progress-track">
-<div class="progress-fill" id="targetProgressFill"></div>
-</div>
-</div>
-<div class="rounded-2xl bg-slate-900/70 p-5">
-<div class="text-sm text-slate-400">
-
-Estimasi Hemat Bulanan
-
-</div>
-<div class="text-2xl font-black text-emerald-300 mt-2" id="monthlySavingSummary">
-
-Rp 0
-
-</div>
-</div>
-</div>
-</div>
-</div>
-</section></div><div class="app-panel" data-panel="auditenergi"><section class="mb-10" id="auditenergi">
-<div class="glass rounded-[30px] p-6 md:p-8">
-<div class="flex items-center gap-3 mb-6">
-<i class="text-yellow-300" data-lucide="clipboard-check"></i>
-<div>
-<h2 class="text-3xl font-black">
-
-🏫 Audit Energi Sekolah
-
-</h2>
-<p class="text-slate-400 mt-2">
-
-Menu investigasi penggunaan energi nyata sebagai jembatan dari simulasi menuju rekomendasi sekolah.
-
-</p>
-</div>
-</div>
-<div class="grid md:grid-cols-2 xl:grid-cols-4 gap-4">
-<div class="analytics-card">
-<div class="text-yellow-300 text-2xl">01</div>
-<h3 class="font-black mt-3">Inventarisasi</h3>
-<p class="text-sm text-slate-400 mt-2">
-
-Siswa mencatat perangkat listrik, daya, jumlah unit, lokasi, dan pola penggunaan.
-
-</p>
-</div>
-<div class="analytics-card">
-<div class="text-emerald-300 text-2xl">02</div>
-<h3 class="font-black mt-3">Observasi</h3>
-<p class="text-sm text-slate-400 mt-2">
-
-Mengamati lampu yang tetap menyala, ruangan kosong, serta potensi pemborosan energi.
-
-</p>
-</div>
-<div class="analytics-card">
-<div class="text-sky-300 text-2xl">03</div>
-<h3 class="font-black mt-3">Analisis Data</h3>
-<p class="text-sm text-slate-400 mt-2">
-
-Menggunakan dashboard untuk menghitung kWh, biaya, penghematan, dan status efisiensi.
-
-</p>
-</div>
-<div class="analytics-card">
-<div class="text-purple-300 text-2xl">04</div>
-<h3 class="font-black mt-3">Rekomendasi</h3>
-<p class="text-sm text-slate-400 mt-2">
-
-Menyusun solusi berbasis data untuk diterapkan pada kelas, lorong, atau area sekolah.
-
-</p>
-</div>
-</div>
-</div>
-</section></div><div class="app-panel" data-panel="ecosensor"><section class="mb-10" id="ecosensor">
-<div class="glass rounded-[30px] p-6 md:p-8">
-<div class="flex items-center gap-3 mb-6">
-<i class="text-emerald-300" data-lucide="flask-conical"></i>
-<div>
-<h2 class="text-3xl font-black">
-
-🔬 Eksperimen Eco-Sensor Kit
-
-</h2>
-<p class="text-slate-400 mt-2">
-
-Eksperimen alat bantu ajar hibrid untuk menguji konsep sensor, otomatisasi, dan efisiensi energi.
-
-</p>
-</div>
-</div>
-<div class="grid md:grid-cols-3 gap-5">
-<div class="analytics-card">
-<h3 class="font-black text-emerald-300">
-
-PIR — Sensor Gerak
-
-</h3>
-<p class="text-sm text-slate-400 mt-3">
-
-Uji respons lampu ketika terdapat aktivitas siswa dan pengaruh waktu tunggu otomatis.
-
-</p>
-</div>
-<div class="analytics-card">
-<h3 class="font-black text-yellow-300">
-
-LDR — Sensor Cahaya
-
-</h3>
-<p class="text-sm text-slate-400 mt-3">
-
-Bandingkan kondisi terang dan gelap untuk menentukan kapan lampu harus menyala atau mati.
-
-</p>
-</div>
-<div class="analytics-card">
-<h3 class="font-black text-sky-300">
-
-Arduino / Microcontroller
-
-</h3>
-<p class="text-sm text-slate-400 mt-3">
-
-Hubungkan pembacaan sensor dengan logika otomatisasi dan data energi yang dapat dikirim ke portal.
-
-</p>
-</div>
-</div>
-</div>
-</section></div><div class="app-panel" data-panel="projekaktivitas"><section class="mb-10" id="projekaktivitas">
-<div class="glass rounded-[30px] p-6 md:p-8">
-<h2 class="text-3xl font-black">
-
-🌐 Projek Lintas Mata Pelajaran — Aktivitas Siswa
-
-</h2>
-<p class="text-slate-400 mt-3 max-w-4xl">
-
-SAVER-KIT menjadi ruang projek kolaboratif yang menghubungkan konsep Fisika dengan Informatika, Matematika, Ekonomi, Bahasa Indonesia, PPKn, dan isu lingkungan.
-
-</p>
-<div class="grid lg:grid-cols-2 gap-4 mt-6">
-<div class="activity-step">
-<strong>Aktivitas 1 — Fisika &amp; Matematika</strong>
-<p class="text-sm text-slate-400 mt-2">
-
-Mengukur daya, waktu penggunaan, menghitung energi listrik, membuat tabel, grafik, dan membandingkan Analog vs Smart Energy.
-
-</p>
-</div>
-<div class="activity-step">
-<strong>Aktivitas 2 — Informatika</strong>
-<p class="text-sm text-slate-400 mt-2">
-
-Mendesain logika sensor, membaca data Arduino, menguji otomatisasi, dan memahami alur data menuju dashboard.
-
-</p>
-</div>
-<div class="activity-step">
-<strong>Aktivitas 3 — Ekonomi</strong>
-<p class="text-sm text-slate-400 mt-2">
-
-Menghitung biaya operasional listrik dan menganalisis manfaat ekonomi dari penghematan energi.
-
-</p>
-</div>
-<div class="activity-step">
-<strong>Aktivitas 4 — Bahasa Indonesia &amp; PPKn</strong>
-<p class="text-sm text-slate-400 mt-2">
-
-Menyusun laporan audit, argumentasi rekomendasi, kampanye hemat energi, dan aksi tanggung jawab warga sekolah.
-
-</p>
-</div>
-</div>
-</div>
-</section></div><div class="app-panel" data-panel="realtime"><section class="mb-10" id="realtime">
-<div class="glass rounded-[30px] p-6 md:p-8">
-<div class="flex flex-col lg:flex-row lg:justify-between gap-5">
-<div>
-<div class="text-xs uppercase font-black text-emerald-300 tracking-[.2em]">
-
-Future IoT Ready
-
-</div>
-<h2 class="text-3xl font-black mt-2">
-
-🤖 Dashboard Arduino Real-Time
-
-</h2>
-<p class="text-slate-400 mt-3 max-w-3xl">
-
-Struktur dashboard telah disiapkan agar nantinya dapat menerima data sensor dari Arduino melalui Serial, Wi-Fi, ESP8266/ESP32, Firebase, MQTT, atau API sekolah.
-
-</p>
-</div>
-<div class="no-print">
-<button class="action-btn primary" onclick="simulateArduinoData()" type="button">
-
-⚡ Simulasikan Data Sensor
-
-</button>
-</div>
-</div>
-<div class="grid md:grid-cols-2 xl:grid-cols-4 gap-4 mt-7">
-<div class="analytics-card">
-<div class="text-sm text-slate-400">Status Koneksi</div>
-<div class="font-black text-emerald-300 mt-2" id="arduinoConnection">
-
-● SIAP INTEGRASI
-
-</div>
-</div>
-<div class="analytics-card">
-<div class="text-sm text-slate-400">PIR</div>
-<div class="text-2xl font-black mt-2 realtime-number" id="pirLive">
-
-Tidak Terdeteksi
-
-</div>
-</div>
-<div class="analytics-card">
-<div class="text-sm text-slate-400">Intensitas Cahaya</div>
-<div class="text-2xl font-black mt-2 realtime-number" id="ldrLive">
-
-0 lux
-
-</div>
-</div>
-<div class="analytics-card">
-<div class="text-sm text-slate-400">Daya Terbaca</div>
-<div class="text-2xl font-black mt-2 realtime-number" id="powerLive">
-
-0 W
-
-</div>
-</div>
-</div>
-<div class="analytics-card mt-5">
-<div class="flex flex-wrap items-center gap-4">
-<span class="font-black sensor-live">
-
-LIVE SENSOR STREAM
-
-</span>
-<span class="text-sm text-slate-400" id="sensorTimestamp">
-
-Menunggu data sensor...
-
-</span>
-</div>
-<p class="text-sm text-slate-400 mt-4">
-
-Hook integrasi tersedia melalui fungsi <strong>updateArduinoData(data)</strong>. Sistem dapat menerima objek data seperti PIR, LDR, daya, energi, atau parameter sensor lain tanpa menghapus kalkulator dan simulasi yang sudah ada.
-
-</p>
-</div>
-</div>
-</section></div><div class="app-panel" data-panel="timPengembang"><section class="glass rounded-[30px] p-6 mb-8" id="timPengembang">
-<h2 class="text-2xl font-black mb-5">
-
-Tim Pengembang
-
-</h2>
-<div class="grid md:grid-cols-2 gap-4">
-<div class="bg-slate-900/70 rounded-2xl p-5">
-<div class="text-sm text-slate-500">
-
-Ketua Tim
-
-</div>
-<div class="text-xl font-black mt-2">
-
-Fredynandus Takalamingan, S.Si
-
-</div>
-<div class="text-emerald-300 text-sm mt-2">
-
-Guru Fisika
-
-</div>
-</div>
-<div class="bg-slate-900/70 rounded-2xl p-5">
-<div class="text-sm text-slate-500">
-
-Anggota Tim
-
-</div>
-<div class="text-xl font-black mt-2">
-
-Justin Rarase Tacazily, ST
-
-</div>
-<div class="text-sky-300 text-sm mt-2">
-
-Guru Informatika
-
-</div>
-</div>
-</div>
-</section></div></div></div></section>
-<!-- =========================
-     VIEWER
-========================= -->
-<section class="hidden" id="viewerView">
-<div class="glass rounded-[30px] p-5 mb-5">
-<div class="flex flex-col md:flex-row justify-between gap-4">
-<div>
-<div class="text-xs uppercase text-emerald-300 font-black">
-
-SAVER-KIT Simulation
-
-</div>
-<h2 class="text-2xl font-black mt-2" id="viewerTitle">
-
-Simulasi
-
-</h2>
-</div>
-<div class="flex gap-3">
-<button class="bg-slate-700 px-5 py-3 rounded-xl font-bold" id="openNewTabBtn">
-
-↗ Tab Baru
-
-</button>
-<button class="bg-emerald-500 text-slate-900 px-5 py-3 rounded-xl font-black" id="backBtnTop">
-
-← Kembali
-
-</button>
-</div>
-</div>
-</div>
-<div class="glass rounded-[30px] p-3">
-<div class="iframe-shell">
-<iframe id="simFrame"></iframe>
-</div>
-</div>
-<div class="text-center mt-5">
-<button class="bg-sky-500 text-slate-900 px-6 py-3 rounded-xl font-black" id="backBtnBottom">
-
-🏠 Kembali ke SAVER-KIT
 
-</button>
+<header class="hero" id="home">
+  <div class="live"><span class="dot"></span> LIVE ENERGY MONITOR • SIMULASI ANALOG</div>
+  <h1>SMART HOME <span>ENERGY SIMULATOR</span></h1>
+  <p>Simulasi interaktif penggunaan energi listrik rumah tangga berbasis perhitungan analog. Nyalakan perangkat, atur daya dan durasi penggunaan, lalu analisis energi dan biaya listrik secara real-time.</p>
+</header>
+
+<main class="container">
+<section class="cards">
+  <div class="card"><div class="label">⚡ Total Daya Aktif</div><div class="value" id="totalPower">0 W</div><div class="sub">Jumlah daya perangkat ON</div></div>
+  <div class="card"><div class="label">🔋 Energi Harian</div><div class="value" id="dailyEnergy">0.00 kWh</div><div class="sub">E = P × t / 1000</div></div>
+  <div class="card"><div class="label">💰 Biaya Harian</div><div class="value" id="dailyCost">Rp 0</div><div class="sub">Energi × tarif listrik</div></div>
+  <div class="card"><div class="label">📅 Estimasi Bulanan</div><div class="value" id="monthlyCost">Rp 0</div><div class="sub">Berdasarkan jumlah hari</div></div>
+</section>
+
+<section class="grid-main section" id="denah">
+<div class="panel">
+<h2>🏠 Denah Rumah Semi-3D Interaktif</h2>
+<div class="house-wrap">
+<div class="house">
+  <div class="room" data-room="ruang-tamu"><div class="room-status" id="status-ruang-tamu">0 aktif</div><h3>🛋️ RUANG TAMU</h3><div class="room-icon">🛋️</div><div class="furniture f1"></div><div class="mini">Lampu • TV • Kipas • AC • Speaker</div></div>
+  <div class="room" data-room="kamar-tidur"><div class="room-status" id="status-kamar-tidur">0 aktif</div><h3>🛏️ KAMAR TIDUR</h3><div class="room-icon">🛏️</div><div class="furniture f1"></div><div class="mini">Lampu • AC • Kipas • Charger • TV</div></div>
+  <div class="room" data-room="dapur"><div class="room-status" id="status-dapur">0 aktif</div><h3>🍳 DAPUR</h3><div class="room-icon">🍳</div><div class="furniture f2"></div><div class="mini">Lampu • Kulkas • Rice Cooker • Microwave</div></div>
+  <div class="room" data-room="kamar-mandi"><div class="room-status" id="status-kamar-mandi">0 aktif</div><h3>🚿 KAMAR MANDI</h3><div class="room-icon">🚿</div><div class="mini">Lampu • Water Heater • Exhaust Fan</div></div>
+  <div class="room" data-room="ruang-kerja"><div class="room-status" id="status-ruang-kerja">0 aktif</div><h3>💻 RUANG KERJA</h3><div class="room-icon">💻</div><div class="furniture f1"></div><div class="mini">Lampu • Laptop • PC • Printer • Kipas</div></div>
+  <div class="room" data-room="teras"><div class="room-status" id="status-teras">0 aktif</div><h3>🌿 TERAS & HALAMAN</h3><div class="room-icon">🌳</div><div class="mini">Lampu Teras • Lampu Taman • Pompa Air</div></div>
+</div>
+</div>
+</div>
+
+<div class="panel">
+<h2>🎛️ Pengaturan Simulasi</h2>
+<div class="settings">
+<div class="field"><label>Tarif Listrik (Rp/kWh)</label><input id="tariff" type="number" value="1444.70" step="0.01"></div>
+<div class="field"><label>Jumlah Hari Estimasi</label><input id="days" type="number" value="30" min="1"></div>
+</div>
+<div class="controls">
+<button class="btn primary" onclick="loadExample()">▶ Contoh Simulasi</button>
+<button class="btn green" onclick="setMode('hemat')">🌱 Mode Hemat</button>
+<button class="btn" onclick="setMode('normal')">⚡ Mode Normal</button>
+<button class="btn red" onclick="setMode('boros')">🔥 Mode Boros</button>
+<button class="btn" onclick="resetSimulation()">🔄 Reset</button>
+</div>
+<div class="sensor-panel">
+<h2 style="margin:0 0 8px;font-size:1rem">🧠 SMART SENSOR CONTROL</h2>
+<div class="sensor-row">
+ <div class="sensor-info"><b>🌙 Sensor LDR — Lampu Teras</b><span>Mode smart: lampu hanya menyala saat kondisi luar gelap.</span></div>
+ <label class="switch"><input type="checkbox" id="ldrEnabled" onchange="toggleLDR(this.checked)"><span class="slider"></span></label>
+</div>
+<div class="sensor-controls">
+ <button class="btn" onclick="setWeather('terang')">☀️ Cuaca Terang</button>
+ <button class="btn" onclick="setWeather('gelap')">🌙 Cuaca Gelap</button>
+ <span class="sensor-status" id="ldrStatus">Sensor OFF • Mode Analog Manual</span>
+</div>
+<div class="sensor-row">
+ <div class="sensor-info"><b>🚶 Sensor PIR — Lampu Kamar Mandi</b><span>Mode smart: lampu otomatis menyala jika ada orang di kamar mandi.</span></div>
+ <label class="switch"><input type="checkbox" id="pirEnabled" onchange="togglePIR(this.checked)"><span class="slider"></span></label>
+</div>
+<div class="sensor-controls">
+ <button class="btn" onclick="setBathroomPresence(false)">🚪 Tidak Ada Orang</button>
+ <button class="btn" onclick="setBathroomPresence(true)">🚶 Ada Orang</button>
+ <span class="sensor-status" id="pirStatus">Sensor OFF • Mode Analog Manual</span>
+</div>
+</div><div class="device-list" id="deviceList"></div>
 </div>
 </section>
-<!-- =========================
-     FOOTER
-========================= -->
-<footer class="text-center text-slate-500 text-sm py-8">
-<div class="font-black text-slate-400">
 
-SAVER-KIT
-
+<section class="section grid-main" id="monitoring">
+<div class="panel">
+<h2>📡 LIVE ENERGY MONITOR</h2>
+<div class="monitor">
+<div class="metric"><span class="label">Status Sistem</span><b id="systemStatus">🟢 NORMAL</b></div>
+<div class="metric"><span class="label">Perangkat Aktif</span><b id="activeCount">0 perangkat</b></div>
+<div class="metric"><span class="label">Total Daya</span><b id="monitorPower">0 W</b></div>
+<div class="metric"><span class="label">Energi Hari Ini</span><b id="monitorEnergy">0.00 kWh</b></div>
 </div>
-<div class="mt-2">
-
-Smart Energy Virtual Simulator &amp; Sensor Kit
-
+<div class="recommend" id="recommendation">💡 Nyalakan perangkat dan atur durasi penggunaan untuk melihat analisis konsumsi energi rumah.</div>
 </div>
-<div class="mt-2">
-
-TARSIUS EDUTECH • SMA Negeri 2 Bitung • TTC 2026
-
+<div class="panel">
+<h2>🧮 Cara Perhitungan Real-Time</h2>
+<div class="metric"><span class="label">Rumus Energi</span><b>E = (P × t) / 1000</b><div class="sub">P dalam Watt, t dalam jam, hasil dalam kWh.</div></div>
+<div class="metric" style="margin-top:10px"><span class="label">Rumus Biaya</span><b>Biaya = E × Tarif</b><div class="sub">Tarif dapat diubah sesuai kebutuhan simulasi.</div></div>
+<div class="metric" style="margin-top:10px"><span class="label">Total Daya</span><b>Pₜ = P₁ + P₂ + P₃ + ...</b><div class="sub">Hanya perangkat dengan status ON yang dihitung.</div></div>
 </div>
-</footer>
+</section>
+
+<section class="panel section">
+<h2>📋 Tabel Monitoring Peralatan</h2>
+<div class="table-wrap"><table class="table">
+<thead><tr><th>Perangkat</th><th>Ruangan</th><th>Daya</th><th>Durasi</th><th>Energi</th><th>Biaya</th><th>Status</th></tr></thead>
+<tbody id="deviceTable"></tbody>
+</table></div>
+</section>
+
+<section class="section" id="analisis">
+<div class="charts">
+<div class="panel chartbox"><h2>📊 Energi per Ruangan</h2><canvas id="energyChart"></canvas></div>
+<div class="panel chartbox"><h2>💰 Biaya per Ruangan</h2><canvas id="costChart"></canvas></div>
 </div>
-<!-- =========================
-     JAVASCRIPT
-========================= -->
+<div class="ai-analysis">
+  <div class="ai-head">
+    <h2 style="margin:0">🤖 SMART AI ENERGY ANALYSIS</h2>
+    <span class="ai-tag" id="modeTag">MODE NORMAL</span>
+  </div>
+  <div class="ai-content" id="aiAnalysis">
+    Jalankan simulasi untuk mendapatkan analisis otomatis mengenai konsumsi energi, perangkat dominan, estimasi biaya, dan rekomendasi penghematan.
+  </div>
+</div>
+</section>
+
+<footer>SMART HOME ENERGY SIMULATOR • Media Pembelajaran Fisika • Simulasi Analog Energi Listrik Rumah Tangga</footer>
+
 <script>
+// DATA PERANGKAT
+// Setiap perangkat memiliki nama, ruangan, daya, durasi, dan status ON/OFF.
+const devices = [
+{id:"lampu-rt",name:"💡 Lampu LED",room:"ruang-tamu",power:10,duration:5,status:false},
+{id:"tv-rt",name:"📺 Televisi",room:"ruang-tamu",power:80,duration:4,status:false},
+{id:"kipas-rt",name:"🌀 Kipas Angin",room:"ruang-tamu",power:45,duration:5,status:false},
+{id:"ac-rt",name:"❄️ AC",room:"ruang-tamu",power:500,duration:6,status:false},
+{id:"speaker",name:"🔊 Speaker",room:"ruang-tamu",power:30,duration:2,status:false},
+{id:"lampu-kt",name:"💡 Lampu LED",room:"kamar-tidur",power:10,duration:7,status:false},
+{id:"ac-kt",name:"❄️ AC",room:"kamar-tidur",power:500,duration:8,status:false},
+{id:"kipas-kt",name:"🌀 Kipas Angin",room:"kamar-tidur",power:45,duration:6,status:false},
+{id:"charger",name:"📱 Charger HP",room:"kamar-tidur",power:10,duration:3,status:false},
+{id:"tv-kt",name:"📺 Televisi",room:"kamar-tidur",power:80,duration:2,status:false},
+{id:"lampu-dp",name:"💡 Lampu",room:"dapur",power:10,duration:5,status:false},
+{id:"kulkas",name:"🧊 Kulkas",room:"dapur",power:150,duration:10,status:false},
+{id:"rice",name:"🍚 Rice Cooker",room:"dapur",power:300,duration:3,status:false},
+{id:"dispenser",name:"🚰 Dispenser",room:"dapur",power:300,duration:2,status:false},
+{id:"microwave",name:"📦 Microwave",room:"dapur",power:800,duration:0.5,status:false},
+{id:"lampu-km",name:"💡 Lampu",room:"kamar-mandi",power:10,duration:2,status:false},
+{id:"heater",name:"🔥 Water Heater",room:"kamar-mandi",power:350,duration:1,status:false},
+{id:"exhaust",name:"🌬️ Exhaust Fan",room:"kamar-mandi",power:30,duration:1,status:false},
+{id:"lampu-rk",name:"💡 Lampu",room:"ruang-kerja",power:10,duration:6,status:false},
+{id:"laptop",name:"💻 Laptop",room:"ruang-kerja",power:65,duration:6,status:false},
+{id:"komputer",name:"🖥️ Komputer",room:"ruang-kerja",power:250,duration:5,status:false},
+{id:"printer",name:"🖨️ Printer",room:"ruang-kerja",power:50,duration:1,status:false},
+{id:"kipas-rk",name:"🌀 Kipas",room:"ruang-kerja",power:45,duration:5,status:false},
+{id:"lampu-teras",name:"💡 Lampu Teras",room:"teras",power:15,duration:12,status:false},
+{id:"lampu-taman",name:"✨ Lampu Taman",room:"teras",power:10,duration:12,status:false},
+{id:"pompa",name:"💧 Pompa Air",room:"teras",power:250,duration:1,status:false}
+];
+const roomNames={"ruang-tamu":"Ruang Tamu","kamar-tidur":"Kamar Tidur","dapur":"Dapur","kamar-mandi":"Kamar Mandi","ruang-kerja":"Ruang Kerja","teras":"Teras & Halaman"};
+let selectedRoom="ruang-tamu", energyChart, costChart; let currentMode="normal";
+let ldrEnabled=false, pirEnabled=false, weather="terang", bathroomOccupied=false;
 
+// FORMAT RUPIAH
+const rupiah=n=>"Rp "+new Intl.NumberFormat("id-ID",{maximumFractionDigits:0}).format(n);
 
-/* =========================
-   ELEMENT
-========================= */
+// MENGHITUNG ENERGI PER PERANGKAT
+function calculateEnergy(d){return d.status?(Number(d.power)*Number(d.duration))/1000:0}
 
-const menuView =
-  document.getElementById("menuView");
-
-
-const viewerView =
-  document.getElementById("viewerView");
-
-
-const viewerTitle =
-  document.getElementById("viewerTitle");
-
-
-const simFrame =
-  document.getElementById("simFrame");
-
-
-const openButtons =
-  document.querySelectorAll(".open-sim");
-
-
-const openNewTabBtn =
-  document.getElementById("openNewTabBtn");
-
-
-const backBtnTop =
-  document.getElementById("backBtnTop");
-
-
-const backBtnBottom =
-  document.getElementById("backBtnBottom");
-
-
-let currentUrl = "";
-
-
-/* =========================
-   OPEN SIMULATION
-========================= */
-
-function openSimulation(
-  title,
-  url
-) {
-
-
-  currentUrl = url;
-
-
-  viewerTitle.textContent =
-    title;
-
-
-  simFrame.src =
-    url;
-
-
-  menuView.classList.add(
-    "hidden"
-  );
-
-
-  viewerView.classList.remove(
-    "hidden"
-  );
-
-
-  window.scrollTo({
-
-    top: 0,
-
-    behavior: "smooth"
-
-  });
-
-
+// MENGHITUNG TOTAL SISTEM
+function totals(){
+ const tariff=Number(document.getElementById("tariff").value)||0;
+ const days=Number(document.getElementById("days").value)||30;
+ const active=devices.filter(d=>d.status);
+ const power=active.reduce((s,d)=>s+Number(d.power),0);
+ const energy=devices.reduce((s,d)=>s+calculateEnergy(d),0);
+ const cost=energy*tariff;
+ return {tariff,days,active,power,energy,cost,monthlyEnergy:energy*days,monthlyCost:cost*days};
 }
 
-
-/* =========================
-   BUTTON SIMULATION
-========================= */
-
-openButtons.forEach(
-
-  button => {
-
-
-    button.addEventListener(
-
-      "click",
-
-      function() {
-
-
-        openSimulation(
-
-          button.dataset.title,
-
-          button.dataset.url
-
-        );
-
-
-      }
-
-    );
-
-
-  }
-
-);
-
-
-/* =========================
-   BACK MENU
-========================= */
-
-function showMenu() {
-
-
-  viewerView.classList.add(
-    "hidden"
-  );
-
-
-  menuView.classList.remove(
-    "hidden"
-  );
-
-
-  simFrame.src =
-    "about:blank";
-
-
-  window.scrollTo({
-
-    top: 0,
-
-    behavior: "smooth"
-
-  });
-
-
+// SMART SENSOR: LDR UNTUK LAMPU TERAS
+function toggleLDR(enabled){
+ ldrEnabled=enabled;
+ applyLDR();
+ updateDashboard();
+}
+function setWeather(condition){
+ weather=condition;
+ applyLDR();
+ updateDashboard();
+}
+function applyLDR(){
+ const lamp=devices.find(d=>d.id==="lampu-teras");
+ const status=document.getElementById("ldrStatus");
+ if(ldrEnabled){
+   lamp.status=(weather==="gelap");
+   status.textContent=weather==="gelap"?"🟢 SMART ACTIVE • Gelap → Lampu ON":"🟡 SMART ACTIVE • Terang → Lampu OFF";
+ }else{
+   status.textContent="⚪ Sensor OFF • Mode Analog Manual";
+ }
 }
 
-
-backBtnTop.addEventListener(
-
-  "click",
-
-  showMenu
-
-);
-
-
-backBtnBottom.addEventListener(
-
-  "click",
-
-  showMenu
-
-);
-
-
-/* =========================
-   NEW TAB
-========================= */
-
-openNewTabBtn.addEventListener(
-
-  "click",
-
-  function() {
-
-
-    if (currentUrl) {
-
-
-      window.open(
-
-        currentUrl,
-
-        "_blank"
-
-      );
-
-
-    }
-
-
-  }
-
-);
-
-
-/* =========================
-   ENERGY CALCULATOR
-========================= */
-
-function calculateEnergy() {
-
-
-  /* INPUT */
-
-  const power =
-    parseFloat(
-      document.getElementById("power").value
-    ) || 0;
-
-
-  const quantity =
-    parseFloat(
-      document.getElementById("quantity").value
-    ) || 0;
-
-
-  const hours =
-    parseFloat(
-      document.getElementById("hours").value
-    ) || 0;
-
-
-  const days =
-    parseFloat(
-      document.getElementById("days").value
-    ) || 0;
-
-
-  const tariff =
-    parseFloat(
-      document.getElementById("tariff").value
-    ) || 0;
-
-
-  const efficiency =
-    parseFloat(
-      document.getElementById("efficiency").value
-    ) || 0;
-
-
-
-  /* =========================
-     ANALOG ENERGY
-
-     Rumus:
-
-     kWh =
-     P x Jumlah x Jam x Hari / 1000
-  ========================= */
-
-
-  const analogEnergy =
-
-    (
-      power *
-      quantity *
-      hours *
-      days
-    )
-
-    / 1000;
-
-
-
-  /* COST ANALOG */
-
-  const analogCost =
-
-    analogEnergy *
-    tariff;
-
-
-
-  /* =========================
-     SMART SENSOR
-  ========================= */
-
-
-  const smartEnergy =
-
-    analogEnergy *
-
-    (
-      1 -
-      efficiency / 100
-    );
-
-
-
-  const smartCost =
-
-    smartEnergy *
-    tariff;
-
-
-
-  /* SAVING */
-
-  const savingEnergy =
-
-    analogEnergy -
-    smartEnergy;
-
-
-
-  const savingCost =
-
-    analogCost -
-    smartCost;
-
-
-
-  /* =========================
-     UPDATE MAIN DASHBOARD
-  ========================= */
-
-
-  document.getElementById(
-    "analogEnergy"
-  ).textContent =
-
-    analogEnergy.toFixed(2)
-    + " kWh";
-
-
-
-  document.getElementById(
-    "analogCost"
-  ).textContent =
-
-    "Rp " +
-    analogCost.toLocaleString(
-      "id-ID"
-    );
-
-
-
-  document.getElementById(
-    "smartEnergy"
-  ).textContent =
-
-    smartEnergy.toFixed(2)
-    + " kWh";
-
-
-
-  document.getElementById(
-    "smartCost"
-  ).textContent =
-
-    "Rp " +
-    smartCost.toLocaleString(
-      "id-ID"
-    );
-
-
-
-  document.getElementById(
-    "savingEnergy"
-  ).textContent =
-
-    savingEnergy.toFixed(2)
-    + " kWh";
-
-
-
-  document.getElementById(
-    "savingCost"
-  ).textContent =
-
-    "Rp " +
-    savingCost.toLocaleString(
-      "id-ID"
-    );
-
-
-
-  document.getElementById(
-    "savingPercent"
-  ).textContent =
-
-    efficiency.toFixed(0)
-    + " %";
-
-
-
-  /* =========================
-     AREA ANALOG
-  ========================= */
-
-
-  document.getElementById(
-    "areaAnalogEnergy"
-  ).textContent =
-
-    analogEnergy.toFixed(2)
-    + " kWh";
-
-
-
-  document.getElementById(
-    "areaAnalogCost"
-  ).textContent =
-
-    "Rp " +
-    analogCost.toLocaleString(
-      "id-ID"
-    );
-
-
-
-  /* =========================
-     SMART CLASS
-  ========================= */
-
-
-  document.getElementById(
-    "areaSmartEnergy"
-  ).textContent =
-
-    smartEnergy.toFixed(2)
-    + " kWh";
-
-
-
-  document.getElementById(
-    "areaSmartCost"
-  ).textContent =
-
-    "Rp " +
-    smartCost.toLocaleString(
-      "id-ID"
-    );
-
-
-
-  /* =========================
-     CORRIDOR
-  ========================= */
-
-
-  const corridorEnergy =
-
-    smartEnergy *
-    0.7;
-
-
-
-  document.getElementById(
-    "areaCorridorEnergy"
-  ).textContent =
-
-    corridorEnergy.toFixed(2)
-    + " kWh";
-
-
-
-  document.getElementById(
-    "areaCorridorSaving"
-  ).textContent =
-
-    (
-      efficiency + 10
-    ).toFixed(0)
-
-    + " %";
-
-
-
-  /* =========================
-     TOTAL
-  ========================= */
-
-
-  const totalBefore =
-
-    analogEnergy +
-    analogEnergy +
-    analogEnergy;
-
-
-
-  const totalAfter =
-
-    smartEnergy +
-    smartEnergy +
-    corridorEnergy;
-
-
-
-  const totalSavingCost =
-
-    (
-      totalBefore -
-      totalAfter
-    )
-
-    * tariff;
-
-
-
-  document.getElementById(
-    "totalBefore"
-  ).textContent =
-
-    totalBefore.toFixed(2)
-    + " kWh";
-
-
-
-  document.getElementById(
-    "totalAfter"
-  ).textContent =
-
-    totalAfter.toFixed(2)
-    + " kWh";
-
-
-
-  document.getElementById(
-    "totalSaving"
-  ).textContent =
-
-    "Rp " +
-
-    totalSavingCost.toLocaleString(
-      "id-ID"
-    );
-
-
-  /* =========================
-     ADVANCED SAVER-KIT ANALYTICS
-  ========================= */
-
-  updateSaverKitAnalytics({
-
-    analogEnergy,
-    smartEnergy,
-    savingEnergy,
-    analogCost,
-    smartCost,
-    savingCost,
-    efficiency,
-    days
-
-  });
-
-
+// SMART SENSOR: PIR UNTUK LAMPU KAMAR MANDI
+function togglePIR(enabled){
+ pirEnabled=enabled;
+ applyPIR();
+ updateDashboard();
+}
+function setBathroomPresence(present){
+ bathroomOccupied=present;
+ applyPIR();
+ updateDashboard();
+}
+function applyPIR(){
+ const lamp=devices.find(d=>d.id==="lampu-km");
+ const status=document.getElementById("pirStatus");
+ if(pirEnabled){
+   lamp.status=bathroomOccupied;
+   status.textContent=bathroomOccupied?"🟢 SMART ACTIVE • Ada Orang → Lampu ON":"🟡 SMART ACTIVE • Tidak Ada Orang → Lampu OFF";
+ }else{
+   status.textContent="⚪ Sensor OFF • Mode Analog Manual";
+ }
 }
 
-
-/* =========================
-   SAVER-KIT ADVANCED ANALYTICS
-========================= */
-
-function updateSaverKitAnalytics(data) {
-
-  const {
-
-    analogEnergy,
-    smartEnergy,
-    savingEnergy,
-    analogCost,
-    smartCost,
-    savingCost,
-    efficiency,
-    days
-
-  } = data;
-
-
-  /* DAILY ENERGY DATA */
-
-  const safeDays =
-    Math.max(days || 1, 1);
-
-
-  const analogDaily =
-    analogEnergy / safeDays;
-
-
-  const smartDaily =
-    smartEnergy / safeDays;
-
-
-  renderEnergyBarChart(
-    analogDaily,
-    smartDaily
-  );
-
-
-  /* EFFICIENCY SCORE */
-
-  const score =
-    Math.max(
-      0,
-      Math.min(
-        100,
-        efficiency
-      )
-    );
-
-
-  document.getElementById(
-    "efficiencyScore"
-  ).textContent =
-    score.toFixed(0);
-
-
-  const status =
-    document.getElementById(
-      "energyStatus"
-    );
-
-
-  const description =
-    document.getElementById(
-      "statusDescription"
-    );
-
-
-  status.className =
-    "status-badge";
-
-
-  if (score >= 60) {
-
-    status.classList.add(
-      "status-efficient"
-    );
-
-    status.textContent =
-      "🟢 EFISIEN";
-
-    description.textContent =
-      "Sistem Smart Energy menunjukkan penghematan tinggi dan layak menjadi rekomendasi penerapan.";
-
-  } else if (score >= 30) {
-
-    status.classList.add(
-      "status-enough"
-    );
-
-    status.textContent =
-      "🟡 CUKUP";
-
-    description.textContent =
-      "Penghematan sudah terlihat, tetapi masih terdapat peluang optimasi penggunaan energi.";
-
-  } else {
-
-    status.classList.add(
-      "status-waste"
-    );
-
-    status.textContent =
-      "🔴 BOROS";
-
-    description.textContent =
-      "Efisiensi masih rendah. Audit penggunaan dan pengaturan otomatis perlu ditingkatkan.";
-
-  }
-
-
-  /* TARGET 30% */
-
-  const target =
-    30;
-
-
-  const progress =
-    Math.min(
-      100,
-      (score / target) * 100
-    );
-
-
-  document.getElementById(
-    "targetProgressFill"
-  ).style.width =
-    progress + "%";
-
-
-  document.getElementById(
-    "targetProgressText"
-  ).textContent =
-    score.toFixed(0)
-    + "% / "
-    + target
-    + "%";
-
-
-  document.getElementById(
-    "monthlySavingSummary"
-  ).textContent =
-    "Rp "
-    + savingCost.toLocaleString(
-      "id-ID"
-    );
-
-
-  /* Keep latest values for report */
-
-  window.saverKitEnergyData = {
-
-    analogEnergy,
-    smartEnergy,
-    savingEnergy,
-    analogCost,
-    smartCost,
-    savingCost,
-    efficiency,
-    days
-
-  };
-
+// MEMPERBARUI SENSOR SMART TANPA MENGUBAH MODE ANALOG
+function refreshSensors(){
+ if(ldrEnabled) applyLDR();
+ if(pirEnabled) applyPIR();
 }
 
-
-function renderEnergyBarChart(
-  analogDaily,
-  smartDaily
-) {
-
-  const chart =
-    document.getElementById(
-      "energyBarChart"
-    );
-
-
-  if (!chart) return;
-
-
-  chart.innerHTML = "";
-
-
-  const labels =
-
-    [
-      "Sen",
-      "Sel",
-      "Rab",
-      "Kam",
-      "Jum",
-      "Sab",
-      "Min"
-    ];
-
-
-  const analogFactors =
-
-    [
-      0.95,
-      1.04,
-      1.00,
-      1.08,
-      0.98,
-      0.55,
-      0.45
-    ];
-
-
-  const smartFactors =
-
-    [
-      0.92,
-      1.00,
-      0.96,
-      1.03,
-      0.94,
-      0.58,
-      0.48
-    ];
-
-
-  const values = [];
-
-
-  labels.forEach(
-    (label, index) => {
-
-      values.push(
-        analogDaily *
-        analogFactors[index]
-      );
-
-      values.push(
-        smartDaily *
-        smartFactors[index]
-      );
-
-    }
-  );
-
-
-  const maxValue =
-    Math.max(
-      ...values,
-      0.01
-    );
-
-
-  labels.forEach(
-    (label, index) => {
-
-      const analogValue =
-        analogDaily *
-        analogFactors[index];
-
-
-      const smartValue =
-        smartDaily *
-        smartFactors[index];
-
-
-      const analogHeight =
-        Math.max(
-          4,
-          (analogValue / maxValue)
-          * 100
-        );
-
-
-      const smartHeight =
-        Math.max(
-          4,
-          (smartValue / maxValue)
-          * 100
-        );
-
-
-      const group =
-        document.createElement(
-          "div"
-        );
-
-
-      group.className =
-        "bar-group";
-
-
-      group.innerHTML =
-        '<div class="bar bar-analog" title="Analog: '
-        + analogValue.toFixed(2)
-        + ' kWh" style="height:'
-        + analogHeight
-        + '%"></div>'
-        +
-        '<div class="bar bar-smart" title="Smart: '
-        + smartValue.toFixed(2)
-        + ' kWh" style="height:'
-        + smartHeight
-        + '%"></div>'
-        +
-        '<span class="bar-label">'
-        + label
-        + '</span>';
-
-
-      chart.appendChild(
-        group
-      );
-
-    }
-  );
-
+// MENGUBAH STATUS PERANGKAT
+function toggleDevice(id){
+ const d=devices.find(x=>x.id===id); d.status=!d.status; refreshSensors(); updateDashboard();
 }
 
-
-/* =========================
-   GENERATE ENERGY REPORT
-========================= */
-
-function generateEnergyReport() {
-
-  const data =
-    window.saverKitEnergyData;
-
-
-  if (!data) {
-
-    calculateEnergy();
-
-  }
-
-
-  const reportData =
-    window.saverKitEnergyData;
-
-
-  const statusText =
-    document.getElementById(
-      "energyStatus"
-    ).textContent;
-
-
-  const report =
-`LAPORAN ENERGI SAVER-KIT
-SMA Negeri 2 Bitung
-Tanggal: ${new Date().toLocaleString("id-ID")}
-
-1. SISTEM ANALOG
-Energi: ${reportData.analogEnergy.toFixed(2)} kWh
-Biaya: Rp ${reportData.analogCost.toLocaleString("id-ID")}
-
-2. SMART ENERGY
-Energi: ${reportData.smartEnergy.toFixed(2)} kWh
-Biaya: Rp ${reportData.smartCost.toLocaleString("id-ID")}
-
-3. HASIL PENGHEMATAN
-Energi Hemat: ${reportData.savingEnergy.toFixed(2)} kWh
-Biaya Hemat: Rp ${reportData.savingCost.toLocaleString("id-ID")}
-Skor Efisiensi: ${reportData.efficiency.toFixed(0)}%
-Status: ${statusText}
-
-REKOMENDASI
-Gunakan hasil audit energi dan data sensor untuk menentukan area prioritas penghematan energi sekolah.`;
-
-  const reportWindow =
-    window.open(
-      "",
-      "_blank"
-    );
-
-
-  if (!reportWindow) {
-
-    window.print();
-
-    return;
-
-  }
-
-
-  reportWindow.document.write(
-    "<!DOCTYPE html><html><head><title>Laporan Energi SAVER-KIT</title>"
-    +
-    "<style>body{font-family:Arial,sans-serif;padding:40px;line-height:1.7;color:#18312a}"
-    +
-    "h1{color:#047857}pre{white-space:pre-wrap;font-family:Arial,sans-serif}"
-    +
-    "@media print{button{display:none}}</style></head><body>"
-    +
-    "<h1>📄 LAPORAN ENERGI SAVER-KIT</h1>"
-    +
-    "<pre>"
-    + report.replace(/&/g, "&amp;").replace(/</g, "&lt;")
-    + "</pre>"
-    +
-    "<button onclick='window.print()'>🖨 Cetak / Simpan PDF</button>"
-    +
-    "</body></html>"
-  );
-
-
-  reportWindow.document.close();
-
+// UPDATE NILAI DAYA ATAU DURASI
+function updateDevice(id,key,value){
+ const d=devices.find(x=>x.id===id); d[key]=Math.max(0,Number(value)||0); updateDashboard();
 }
 
-
-/* =========================
-   ARDUINO / IOT DATA HOOK
-========================= */
-
-function updateArduinoData(data = {}) {
-
-  const pir =
-    data.pir === true
-      ? "Terdeteksi"
-      : data.pir === false
-        ? "Tidak Terdeteksi"
-        : (
-          data.pir ??
-          "Menunggu"
-        );
-
-
-  const ldr =
-    data.ldr ??
-    data.lux ??
-    0;
-
-
-  const power =
-    data.power ??
-    data.watt ??
-    0;
-
-
-  document.getElementById(
-    "pirLive"
-  ).textContent =
-    pir;
-
-
-  document.getElementById(
-    "ldrLive"
-  ).textContent =
-    Number(ldr).toLocaleString(
-      "id-ID"
-    )
-    + " lux";
-
-
-  document.getElementById(
-    "powerLive"
-  ).textContent =
-    Number(power).toLocaleString(
-      "id-ID"
-    )
-    + " W";
-
-
-  document.getElementById(
-    "arduinoConnection"
-  ).textContent =
-    "● DATA MASUK";
-
-
-  document.getElementById(
-    "sensorTimestamp"
-  ).textContent =
-    "Data terakhir: "
-    + new Date().toLocaleTimeString(
-      "id-ID"
-    );
-
-
-  /* Optional real sensor values can update calculator */
-
-  if (
-    typeof data.power === "number"
-  ) {
-
-    document.getElementById(
-      "power"
-    ).value =
-      data.power;
-
-    calculateEnergy();
-
-  }
-
+// MEMBUAT PANEL PERANGKAT BERDASARKAN RUANGAN
+function renderDevices(){
+ const list=document.getElementById("deviceList");
+ const filtered=devices.filter(d=>d.room===selectedRoom);
+ list.innerHTML=`<div class="label" style="margin-bottom:10px">Perangkat • ${roomNames[selectedRoom]}</div>`+filtered.map(d=>`
+ <div class="device">
+  <div class="device-head"><div><div class="device-name">${d.name}</div><span class="badge ${d.status?'on':''}">${d.status?'🟢 ON':'🔴 OFF'}</span></div>
+  <button class="toggle ${d.status?'on':''}" onclick="toggleDevice('${d.id}')">${d.status?'MATIKAN':'NYALAKAN'}</button></div>
+  <div class="device-grid">
+   <label>Daya (W)<input type="number" value="${d.power}" min="0" oninput="updateDevice('${d.id}','power',this.value)"></label>
+   <label>Durasi (Jam/Hari)<input type="number" value="${d.duration}" min="0" step="0.1" oninput="updateDevice('${d.id}','duration',this.value)"></label>
+  </div>
+ </div>`).join("");
 }
 
-
-function simulateArduinoData() {
-
-  const simulatedPower =
-    Math.round(
-      12 + Math.random() * 24
-    );
-
-
-  updateArduinoData({
-
-    pir:
-      Math.random() > 0.35,
-
-    ldr:
-      Math.round(
-        150 + Math.random() * 700
-      ),
-
-    power:
-      simulatedPower
-
-  });
-
+// MEMPERBARUI TABEL MONITORING
+function renderTable(){
+ const tariff=Number(document.getElementById("tariff").value)||0;
+ document.getElementById("deviceTable").innerHTML=devices.map(d=>{
+ const e=calculateEnergy(d),c=e*tariff;
+ return `<tr><td>${d.name}</td><td>${roomNames[d.room]}</td><td>${d.power} W</td><td>${d.duration} jam</td><td>${e.toFixed(3)} kWh</td><td>${rupiah(c)}</td><td class="${d.status?'ontext':'offtext'}">${d.status?'ON':'OFF'}</td></tr>`;
+ }).join("");
 }
 
-
-/* Global endpoint for future Serial/WebSocket/MQTT/Firebase/API bridge */
-
-window.updateArduinoData =
-  updateArduinoData;
-
-
-
-
-/* =========================
-   AUTO CALCULATE
-========================= */
-
-const inputs =
-
-  document.querySelectorAll(
-    ".energy-input"
-  );
-
-
-inputs.forEach(
-
-  input => {
-
-
-    input.addEventListener(
-
-      "input",
-
-      calculateEnergy
-
-    );
-
-
-  }
-
-);
-
-
-/* =========================
-   LIGHT / DARK MODE
-========================= */
-
-const themeToggle =
-  document.getElementById("themeToggle");
-
-
-const themeIcon =
-  document.getElementById("themeIcon");
-
-
-const themeText =
-  document.getElementById("themeText");
-
-
-function updateThemeUI(theme) {
-
-  if (theme === "dark") {
-
-    themeIcon.setAttribute(
-      "data-lucide",
-      "sun"
-    );
-
-    themeText.textContent =
-      "Mode Terang";
-
-  } else {
-
-    themeIcon.setAttribute(
-      "data-lucide",
-      "moon"
-    );
-
-    themeText.textContent =
-      "Mode Gelap";
-
-  }
-
-  lucide.createIcons();
-
+// UPDATE STATUS RUANGAN
+function updateRooms(){
+ document.querySelectorAll(".room").forEach(r=>{
+  const room=r.dataset.room, count=devices.filter(d=>d.room===room&&d.status).length;
+  document.getElementById("status-"+room).textContent=count+" aktif";
+  r.style.filter=count?"brightness(1.2) saturate(1.2)":"brightness(.72)";
+  r.classList.toggle("smart-device",(room==="teras"&&ldrEnabled)||(room==="kamar-mandi"&&pirEnabled));
+ });
 }
 
-
-function setTheme(theme) {
-
-  document.documentElement.setAttribute(
-    "data-theme",
-    theme
-  );
-
-  localStorage.setItem(
-    "saverkit-theme",
-    theme
-  );
-
-  updateThemeUI(theme);
-
+// UPDATE GRAFIK
+function updateCharts(){
+ const t=totals(), labels=Object.values(roomNames);
+ const energies=Object.keys(roomNames).map(room=>devices.filter(d=>d.room===room).reduce((s,d)=>s+calculateEnergy(d),0));
+ const costs=energies.map(e=>e*t.tariff);
+ if(!energyChart){
+  energyChart=new Chart(document.getElementById("energyChart"),{type:"bar",data:{labels,datasets:[{label:"Energi (kWh)",data:energies,borderWidth:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:"#c7d5e5",font:{size:10}},grid:{display:false}},y:{ticks:{color:"#c7d5e5",font:{size:10}},grid:{color:"#ffffff0d"}}}}});
+  costChart=new Chart(document.getElementById("costChart"),{type:"doughnut",data:{labels,datasets:[{label:"Biaya",data:costs,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom",labels:{color:"#c7d5e5",boxWidth:10,font:{size:10}}}}}});
+ }else{
+  energyChart.data.datasets[0].data=energies; energyChart.update();
+  costChart.data.datasets[0].data=costs; costChart.update();
+ }
 }
 
+// ANALISIS AI BERBASIS DATA SIMULASI
+// Analisis dibuat dari hasil perhitungan real-time setiap mode simulasi.
+function updateAIAnalysis(){
+ const t=totals();
+ const active=t.active;
+ const tag=document.getElementById("modeTag");
+ const box=document.getElementById("aiAnalysis");
+ const modeLabels={normal:"⚡ MODE NORMAL",hemat:"🌱 MODE HEMAT ENERGI",boros:"🔥 MODE BOROS"};
+ tag.textContent=modeLabels[currentMode];
 
-const savedTheme =
-  localStorage.getItem(
-    "saverkit-theme"
-  );
+ if(!active.length){
+   box.innerHTML=`<strong>AI menunggu data simulasi.</strong><br>Belum ada perangkat yang aktif. Pilih <b>Mode Normal</b>, <b>Mode Hemat</b>, <b>Mode Boros</b>, atau aktifkan perangkat secara manual untuk mendapatkan analisis energi.`;
+   return;
+ }
 
+ const sorted=[...active].sort((a,b)=>calculateEnergy(b)-calculateEnergy(a));
+ const top=sorted[0], topEnergy=calculateEnergy(top);
+ const roomEnergy={};
+ Object.keys(roomNames).forEach(r=>roomEnergy[r]=devices.filter(d=>d.room===r).reduce((s,d)=>s+calculateEnergy(d),0));
+ const topRoom=Object.entries(roomEnergy).sort((a,b)=>b[1]-a[1])[0];
 
-const systemDark =
-  window.matchMedia &&
-  window.matchMedia(
-    "(prefers-color-scheme: dark)"
-  ).matches;
+ let score, summary, advice=[];
+ if(currentMode==="hemat"){
+   score="SANGAT EFISIEN";
+   summary="Konfigurasi saat ini menggunakan perangkat pilihan dengan konsumsi lebih terkendali.";
+   advice=[
+    "Pertahankan penggunaan perangkat berdaya besar hanya saat diperlukan.",
+    "Gunakan lampu LED dan matikan perangkat setelah selesai digunakan.",
+    "Pantau durasi perangkat yang tetap menyala dalam waktu lama."
+   ];
+ }else if(currentMode==="boros"){
+   score="KONSUMSI TINGGI";
+   summary="Sebagian besar perangkat aktif secara bersamaan sehingga daya puncak dan biaya listrik meningkat signifikan.";
+   advice=[
+    "Prioritaskan mematikan perangkat berdaya besar yang tidak digunakan.",
+    "Kurangi durasi AC, water heater, microwave, dan perangkat pemanas.",
+    "Hindari menyalakan banyak perangkat berdaya tinggi secara bersamaan."
+   ];
+ }else{
+   score=t.power<1000?"EFISIEN":"PERLU OPTIMASI";
+   summary="Pola penggunaan berada pada simulasi normal dan dapat dioptimalkan berdasarkan perangkat dominan.";
+   advice=[
+    "Periksa perangkat dengan energi tertinggi terlebih dahulu.",
+    "Atur jadwal penggunaan perangkat berdaya besar.",
+    "Bandingkan hasil dengan Mode Hemat untuk melihat potensi pengurangan biaya."
+   ];
+ }
 
+ box.innerHTML=`
+ <strong>📌 Status AI: ${score}</strong><br>
+ ${summary}
+ <ul class="ai-list">
+   <li><b>Perangkat paling dominan:</b> ${top.name} — ${topEnergy.toFixed(2)} kWh/hari.</li>
+   <li><b>Ruangan tertinggi:</b> ${roomNames[topRoom[0]]} — ${topRoom[1].toFixed(2)} kWh/hari.</li>
+   <li><b>Total simulasi:</b> ${t.power.toLocaleString("id-ID")} W • ${t.energy.toFixed(2)} kWh/hari • ${rupiah(t.cost)}/hari.</li>
+   <li><b>Proyeksi ${t.days} hari:</b> ${t.monthlyEnergy.toFixed(2)} kWh • ${rupiah(t.monthlyCost)}.</li>
+ </ul>
+ <strong>💡 Rekomendasi AI:</strong>
+ <ul class="ai-list">${advice.map(a=>`<li>${a}</li>`).join("")}</ul>
+ <strong>🧠 Status Smart System:</strong>
+ <ul class="ai-list">
+   <li>LDR Lampu Teras: ${ldrEnabled ? (weather==="gelap"?"ACTIVE • kondisi gelap":"ACTIVE • kondisi terang") : "OFF • kontrol analog manual"}.</li>
+   <li>PIR Kamar Mandi: ${pirEnabled ? (bathroomOccupied?"ACTIVE • ada orang":"ACTIVE • ruangan kosong") : "OFF • kontrol analog manual"}.</li>
+ </ul>`;
+}
 
-const initialTheme =
-  savedTheme ||
-  (
-    systemDark
-      ? "dark"
-      : "light"
-  );
+// UPDATE DASHBOARD UTAMA
+function updateDashboard(){
+ refreshSensors();
+ const t=totals();
+ document.getElementById("totalPower").textContent=t.power.toLocaleString("id-ID")+" W";
+ document.getElementById("dailyEnergy").textContent=t.energy.toFixed(2)+" kWh";
+ document.getElementById("dailyCost").textContent=rupiah(t.cost);
+ document.getElementById("monthlyCost").textContent=rupiah(t.monthlyCost);
+ document.getElementById("activeCount").textContent=t.active.length+" perangkat";
+ document.getElementById("monitorPower").textContent=t.power.toLocaleString("id-ID")+" W";
+ document.getElementById("monitorEnergy").textContent=t.energy.toFixed(2)+" kWh";
+ let status="🟢 KONSUMSI HEMAT",rec="💡 Konsumsi listrik masih rendah. Gunakan perangkat seperlunya dan tetap matikan peralatan setelah selesai digunakan.";
+ if(t.power>=1000&&t.power<=2500){status="🟡 KONSUMSI SEDANG";rec="💡 Konsumsi sedang. Periksa perangkat dengan durasi panjang seperti AC, kulkas, dan lampu yang tidak diperlukan."}
+ if(t.power>2500){status="🔴 KONSUMSI TINGGI";rec="⚠️ Konsumsi tinggi! Kurangi perangkat berdaya besar, atur durasi AC, dan matikan perangkat yang tidak digunakan."}
+ document.getElementById("systemStatus").textContent=status;
+ document.getElementById("recommendation").textContent=rec;
+ renderDevices(); renderTable(); updateRooms(); updateCharts(); updateAIAnalysis();
+}
 
+// MODE SIMULASI
+function setMode(mode){
+ currentMode=mode;
+ devices.forEach(d=>d.status=false);
+ if(mode==="hemat"){
+  ["lampu-rt","kulkas","lampu-kt","laptop","lampu-teras"].forEach(id=>devices.find(d=>d.id===id).status=true);
+ }
+ if(mode==="boros"){
+  devices.forEach(d=>d.status=true);
+ }
+ refreshSensors();
+ updateDashboard();
+}
 
-document.documentElement.setAttribute(
-  "data-theme",
-  initialTheme
-);
+// CONTOH SIMULASI
+function loadExample(){
+ currentMode="normal";
+ devices.forEach(d=>d.status=false);
+ ["lampu-rt","tv-rt","ac-rt","kulkas","lampu-kt","laptop"].forEach(id=>devices.find(d=>d.id===id).status=true);
+ updateDashboard();
+}
 
+// RESET SIMULASI
+function resetSimulation(){
+ currentMode="normal";
+ ldrEnabled=false; pirEnabled=false; weather="terang"; bathroomOccupied=false;
+ const le=document.getElementById("ldrEnabled"), pe=document.getElementById("pirEnabled");
+ if(le) le.checked=false; if(pe) pe.checked=false;
+ devices.forEach(d=>d.status=false);
+ document.getElementById("tariff").value=1444.70;
+ document.getElementById("days").value=30;
+ updateDashboard();
+}
 
-updateThemeUI(
-  initialTheme
-);
+// EVENT KLIK RUANGAN
+document.querySelectorAll(".room").forEach(room=>room.addEventListener("click",()=>{
+ selectedRoom=room.dataset.room;
+ document.querySelectorAll(".room").forEach(r=>r.classList.remove("active"));
+ room.classList.add("active"); renderDevices();
+}));
 
+document.getElementById("tariff").addEventListener("input",updateDashboard);
+document.getElementById("days").addEventListener("input",updateDashboard);
 
-themeToggle.addEventListener(
-  "click",
-  function() {
-
-    const currentTheme =
-      document.documentElement.getAttribute(
-        "data-theme"
-      );
-
-
-    setTheme(
-      currentTheme === "dark"
-        ? "light"
-        : "dark"
-    );
-
-  }
-);
-
-
-/* =========================
-   INITIAL CALCULATE
-========================= */
-
-calculateEnergy();
-
-
-/* =========================
-   ICON
-========================= */
-
-lucide.createIcons();
-
-
-</script>
-<script>
-/* SIDEBAR MENU: hanya mengatur tampilan panel, fungsi asli tidak diubah */
-document.addEventListener('DOMContentLoaded', function(){
-  const sidebarLinks=document.querySelectorAll('.sidebar-link');
-  const panels=document.querySelectorAll('.app-panel');
-  const welcome=document.getElementById('beranda');
-  function showPanel(target){
-    sidebarLinks.forEach(link=>link.classList.toggle('active',link.dataset.target===target));
-    panels.forEach(panel=>panel.classList.toggle('active',panel.dataset.panel===target));
-    if(welcome) welcome.classList.toggle('active',target==='beranda');
-    // Posisi halaman dipertahankan agar saat menu diklik langsung menampilkan isi panel.
-  }
-  sidebarLinks.forEach(link=>link.addEventListener('click',()=>showPanel(link.dataset.target)));
-  if(window.lucide) lucide.createIcons();
-});
-</script>
-<script id="learning-submenu-script">
-document.addEventListener('DOMContentLoaded', function(){
-  const group = document.getElementById('learningMenuGroup');
-  const toggle = document.getElementById('learningMenuToggle');
-
-  if (!group || !toggle) return;
-
-  toggle.addEventListener('click', function(){
-    const isOpen = group.classList.toggle('open');
-    toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-  });
-
-  group.querySelectorAll('.learning-submenu .sidebar-link').forEach(function(item){
-    item.addEventListener('click', function(){
-      group.classList.add('open');
-      toggle.setAttribute('aria-expanded', 'true');
-    });
-  });
-});
+// JALANKAN SAAT HALAMAN DIBUKA
+document.querySelector('.room[data-room="ruang-tamu"]').classList.add("active");
+updateDashboard();
 </script>
 </body>
 </html>
