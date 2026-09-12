@@ -35,6 +35,7 @@ nav{position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;
 .settings{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:15px}.field{background:#ffffff08;padding:10px;border-radius:12px;border:1px solid #ffffff10}.field label{display:block;color:var(--muted);font-size:.72rem;margin-bottom:6px}.field input,.field select{width:100%;background:#07111f;color:#fff;border:1px solid var(--line);border-radius:8px;padding:8px}
 .device-list{max-height:560px;overflow:auto;padding-right:4px}.device{background:#ffffff07;border:1px solid #ffffff12;border-radius:14px;padding:12px;margin-bottom:10px}.device-head{display:flex;justify-content:space-between;gap:8px;align-items:center}.device-name{font-weight:800;font-size:.9rem}.badge{font-size:.68rem;padding:5px 8px;border-radius:99px;background:#fb718522;color:#ff9aaa}.badge.on{background:#36d39922;color:#7fffc8}.device-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}.device-grid label{font-size:.68rem;color:var(--muted)}.device-grid input{width:100%;margin-top:4px;background:#07111f;color:#fff;border:1px solid var(--line);border-radius:7px;padding:7px}.toggle{border:0;border-radius:9px;padding:8px 11px;cursor:pointer;background:#ffffff12;color:#fff}.toggle.on{background:#36d399;color:#052319}
 .monitor{display:grid;grid-template-columns:1fr 1fr;gap:10px}.metric{padding:13px;border-radius:14px;background:#ffffff08;border:1px solid #ffffff10}.metric b{display:block;font-size:1.25rem;margin-top:5px}.recommend{margin-top:14px;padding:13px;border-radius:14px;background:#36d1dc10;border:1px solid #36d1dc33;color:#cceff3;line-height:1.5;font-size:.85rem}
+.sensor-panel{margin-top:16px;padding:16px;border-radius:16px;background:linear-gradient(135deg,#facc1510,#36d1dc0c);border:1px solid #facc1540}.sensor-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #ffffff12}.sensor-row:last-child{border-bottom:0}.sensor-info b{display:block}.sensor-info span{font-size:.75rem;color:var(--muted)}.switch{position:relative;width:48px;height:26px;display:inline-block}.switch input{display:none}.slider{position:absolute;inset:0;background:#46576c;border-radius:20px;cursor:pointer;transition:.3s}.slider:before{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.3s}.switch input:checked+.slider{background:#36d399}.switch input:checked+.slider:before{transform:translateX(22px)}.sensor-controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.sensor-status{font-size:.72rem;padding:5px 8px;border-radius:99px;background:#ffffff10;color:#c7d5e5}.smart-device{outline:2px solid #facc1570;box-shadow:0 0 18px #facc1520}
 .table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;font-size:.82rem}.table th,.table td{padding:10px;border-bottom:1px solid #ffffff12;text-align:left}.table th{color:var(--muted);font-weight:600}.ontext{color:#62e8b3}.offtext{color:#ff8b9a}
 .charts{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}.chartbox{height:280px;padding:16px!important}.chartbox canvas{max-height:220px!important;width:100%!important}.ai-analysis{margin-top:18px;padding:18px;border-radius:18px;background:linear-gradient(135deg,#8b5cf618,#36d1dc10);border:1px solid #8b5cf655}.ai-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.ai-tag{font-size:.72rem;padding:6px 10px;border-radius:99px;background:#8b5cf622;color:#c4b5fd}.ai-content{color:#d9e6f3;line-height:1.7;font-size:.9rem}.ai-content strong{color:#fff}.ai-list{margin:10px 0 0;padding-left:18px}.ai-list li{margin:5px 0;color:#b8c8d9}
 .flow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center}.flow div{padding:14px;border-radius:13px;background:#ffffff09;border:1px solid #ffffff18;text-align:center;font-size:.85rem}.arrow{color:var(--accent);font-size:24px}
@@ -92,7 +93,27 @@ footer{text-align:center;color:var(--muted);padding:35px;font-size:.82rem}
 <button class="btn red" onclick="setMode('boros')">🔥 Mode Boros</button>
 <button class="btn" onclick="resetSimulation()">🔄 Reset</button>
 </div>
-<div class="device-list" id="deviceList"></div>
+<div class="sensor-panel">
+<h2 style="margin:0 0 8px;font-size:1rem">🧠 SMART SENSOR CONTROL</h2>
+<div class="sensor-row">
+ <div class="sensor-info"><b>🌙 Sensor LDR — Lampu Teras</b><span>Mode smart: lampu hanya menyala saat kondisi luar gelap.</span></div>
+ <label class="switch"><input type="checkbox" id="ldrEnabled" onchange="toggleLDR(this.checked)"><span class="slider"></span></label>
+</div>
+<div class="sensor-controls">
+ <button class="btn" onclick="setWeather('terang')">☀️ Cuaca Terang</button>
+ <button class="btn" onclick="setWeather('gelap')">🌙 Cuaca Gelap</button>
+ <span class="sensor-status" id="ldrStatus">Sensor OFF • Mode Analog Manual</span>
+</div>
+<div class="sensor-row">
+ <div class="sensor-info"><b>🚶 Sensor PIR — Lampu Kamar Mandi</b><span>Mode smart: lampu otomatis menyala jika ada orang di kamar mandi.</span></div>
+ <label class="switch"><input type="checkbox" id="pirEnabled" onchange="togglePIR(this.checked)"><span class="slider"></span></label>
+</div>
+<div class="sensor-controls">
+ <button class="btn" onclick="setBathroomPresence(false)">🚪 Tidak Ada Orang</button>
+ <button class="btn" onclick="setBathroomPresence(true)">🚶 Ada Orang</button>
+ <span class="sensor-status" id="pirStatus">Sensor OFF • Mode Analog Manual</span>
+</div>
+</div><div class="device-list" id="deviceList"></div>
 </div>
 </section>
 
@@ -174,6 +195,7 @@ const devices = [
 ];
 const roomNames={"ruang-tamu":"Ruang Tamu","kamar-tidur":"Kamar Tidur","dapur":"Dapur","kamar-mandi":"Kamar Mandi","ruang-kerja":"Ruang Kerja","teras":"Teras & Halaman"};
 let selectedRoom="ruang-tamu", energyChart, costChart; let currentMode="normal";
+let ldrEnabled=false, pirEnabled=false, weather="terang", bathroomOccupied=false;
 
 // FORMAT RUPIAH
 const rupiah=n=>"Rp "+new Intl.NumberFormat("id-ID",{maximumFractionDigits:0}).format(n);
@@ -192,9 +214,59 @@ function totals(){
  return {tariff,days,active,power,energy,cost,monthlyEnergy:energy*days,monthlyCost:cost*days};
 }
 
+// SMART SENSOR: LDR UNTUK LAMPU TERAS
+function toggleLDR(enabled){
+ ldrEnabled=enabled;
+ applyLDR();
+ updateDashboard();
+}
+function setWeather(condition){
+ weather=condition;
+ applyLDR();
+ updateDashboard();
+}
+function applyLDR(){
+ const lamp=devices.find(d=>d.id==="lampu-teras");
+ const status=document.getElementById("ldrStatus");
+ if(ldrEnabled){
+   lamp.status=(weather==="gelap");
+   status.textContent=weather==="gelap"?"🟢 SMART ACTIVE • Gelap → Lampu ON":"🟡 SMART ACTIVE • Terang → Lampu OFF";
+ }else{
+   status.textContent="⚪ Sensor OFF • Mode Analog Manual";
+ }
+}
+
+// SMART SENSOR: PIR UNTUK LAMPU KAMAR MANDI
+function togglePIR(enabled){
+ pirEnabled=enabled;
+ applyPIR();
+ updateDashboard();
+}
+function setBathroomPresence(present){
+ bathroomOccupied=present;
+ applyPIR();
+ updateDashboard();
+}
+function applyPIR(){
+ const lamp=devices.find(d=>d.id==="lampu-km");
+ const status=document.getElementById("pirStatus");
+ if(pirEnabled){
+   lamp.status=bathroomOccupied;
+   status.textContent=bathroomOccupied?"🟢 SMART ACTIVE • Ada Orang → Lampu ON":"🟡 SMART ACTIVE • Tidak Ada Orang → Lampu OFF";
+ }else{
+   status.textContent="⚪ Sensor OFF • Mode Analog Manual";
+ }
+}
+
+// MEMPERBARUI SENSOR SMART TANPA MENGUBAH MODE ANALOG
+function refreshSensors(){
+ if(ldrEnabled) applyLDR();
+ if(pirEnabled) applyPIR();
+}
+
 // MENGUBAH STATUS PERANGKAT
 function toggleDevice(id){
- const d=devices.find(x=>x.id===id); d.status=!d.status; updateDashboard();
+ const d=devices.find(x=>x.id===id); d.status=!d.status; refreshSensors(); updateDashboard();
 }
 
 // UPDATE NILAI DAYA ATAU DURASI
@@ -232,6 +304,7 @@ function updateRooms(){
   const room=r.dataset.room, count=devices.filter(d=>d.room===room&&d.status).length;
   document.getElementById("status-"+room).textContent=count+" aktif";
   r.style.filter=count?"brightness(1.2) saturate(1.2)":"brightness(.72)";
+  r.classList.toggle("smart-device",(room==="teras"&&ldrEnabled)||(room==="kamar-mandi"&&pirEnabled));
  });
 }
 
@@ -307,11 +380,17 @@ function updateAIAnalysis(){
    <li><b>Proyeksi ${t.days} hari:</b> ${t.monthlyEnergy.toFixed(2)} kWh • ${rupiah(t.monthlyCost)}.</li>
  </ul>
  <strong>💡 Rekomendasi AI:</strong>
- <ul class="ai-list">${advice.map(a=>`<li>${a}</li>`).join("")}</ul>`;
+ <ul class="ai-list">${advice.map(a=>`<li>${a}</li>`).join("")}</ul>
+ <strong>🧠 Status Smart System:</strong>
+ <ul class="ai-list">
+   <li>LDR Lampu Teras: ${ldrEnabled ? (weather==="gelap"?"ACTIVE • kondisi gelap":"ACTIVE • kondisi terang") : "OFF • kontrol analog manual"}.</li>
+   <li>PIR Kamar Mandi: ${pirEnabled ? (bathroomOccupied?"ACTIVE • ada orang":"ACTIVE • ruangan kosong") : "OFF • kontrol analog manual"}.</li>
+ </ul>`;
 }
 
 // UPDATE DASHBOARD UTAMA
 function updateDashboard(){
+ refreshSensors();
  const t=totals();
  document.getElementById("totalPower").textContent=t.power.toLocaleString("id-ID")+" W";
  document.getElementById("dailyEnergy").textContent=t.energy.toFixed(2)+" kWh";
@@ -338,6 +417,7 @@ function setMode(mode){
  if(mode==="boros"){
   devices.forEach(d=>d.status=true);
  }
+ refreshSensors();
  updateDashboard();
 }
 
@@ -352,6 +432,9 @@ function loadExample(){
 // RESET SIMULASI
 function resetSimulation(){
  currentMode="normal";
+ ldrEnabled=false; pirEnabled=false; weather="terang"; bathroomOccupied=false;
+ const le=document.getElementById("ldrEnabled"), pe=document.getElementById("pirEnabled");
+ if(le) le.checked=false; if(pe) pe.checked=false;
  devices.forEach(d=>d.status=false);
  document.getElementById("tariff").value=1444.70;
  document.getElementById("days").value=30;
